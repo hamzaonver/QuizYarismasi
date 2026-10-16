@@ -1,0 +1,81 @@
+@model QuestionFormViewModel
+@{
+    var isNew = Model.QuestionId == null;
+    ViewData["Title"] = isNew ? "Soru ekle" : $"Soru {Model.OrderNo} · düzenle";
+    var letters = "ABCDEF";
+
+    // Dolu şık sayısı kadar satır açık başlasın (en az 4)
+    var lastFilled = Model.Options.FindLastIndex(o => !string.IsNullOrWhiteSpace(o));
+    var visibleCount = Math.Max(4, lastFilled + 1);
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index">Quizlerim</a></li>
+        <li class="breadcrumb-item"><a asp-action="Details" asp-route-id="@Model.QuizId">@Model.QuizTitle</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
+
+<div class="qa-card" style="max-width:820px;">
+    <h1 class="page-title h3">@ViewData["Title"]</h1>
+    <p class="page-subtitle">Şıkları yaz ve doğru cevabın yanındaki yuvarlağı işaretle. Boş bıraktığın şıklar dikkate alınmaz.</p>
+
+    <form asp-action="@(isNew ? "AddQuestion" : "EditQuestion")"
+          asp-route-id="@Model.QuestionId"
+          asp-route-quizId="@(isNew ? Model.QuizId : null)"
+          method="post" novalidate>
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2" role="alert"></div>
+
+        <input type="hidden" asp-for="QuizId" />
+        <input type="hidden" asp-for="QuizTitle" />
+        <input type="hidden" asp-for="OrderNo" />
+
+        <div class="mb-3">
+            <label asp-for="Text" class="form-label fw-bold"></label>
+            <textarea asp-for="Text" class="form-control" rows="2" placeholder="Sorunu yaz..." autofocus></textarea>
+            <span asp-validation-for="Text" class="text-danger small"></span>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-6 col-md-3">
+                <label asp-for="TimeLimitSeconds" class="form-label"></label>
+                <input asp-for="TimeLimitSeconds" class="form-control" type="number"
+                       min="@QuizRules.MinTime" max="@QuizRules.MaxTime" />
+                <span asp-validation-for="TimeLimitSeconds" class="text-danger small"></span>
+            </div>
+            <div class="col-6 col-md-3">
+                <label asp-for="Points" class="form-label"></label>
+                <input asp-for="Points" class="form-control" type="number" step="100"
+                       min="@QuizRules.MinPoints" max="@QuizRules.MaxPoints" />
+                <span asp-validation-for="Points" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <fieldset class="mb-3">
+            <legend class="form-label fw-bold fs-6">Şıklar <span class="hint fw-normal">(@QuizRules.MinOptions-@QuizRules.MaxOptions şık, tek doğru cevap)</span></legend>
+
+            @for (var i = 0; i < Model.Options.Count; i++)
+            {
+                <div class="option-row @(i >= visibleCount ? "is-hidden" : "")">
+                    <span class="swatch opt-@(i + 1)">@letters[i]</span>
+                    <input asp-for="Options[i]" class="form-control" placeholder="Şık @letters[i]" maxlength="@QuizRules.OptionTextMaxLength" />
+                    <input type="radio" class="form-check-input" name="CorrectIndex" value="@i"
+                           checked="@(Model.CorrectIndex == i)"
+                           title="Doğru cevap" aria-label="Şık @letters[i] doğru cevap" />
+                </div>
+            }
+
+            <button type="button" id="add-option" class="btn btn-link px-0">+ Şık ekle</button>
+        </fieldset>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">@(isNew ? "Soruyu ekle" : "Kaydet")</button>
+            <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.QuizId">Vazgeç</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

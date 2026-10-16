@@ -1,0 +1,152 @@
+@model QuizDetailDto
+@{
+    ViewData["Title"] = Model.Title;
+    var letters = "ABCDEF";
+    var canEditQuestions = !Model.IsLocked;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index">Quizlerim</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
+    </ol>
+</nav>
+
+<div class="qa-card mb-4">
+    <div class="d-flex flex-wrap justify-content-between gap-3">
+        <div>
+            <div class="d-flex gap-2 mb-2 flex-wrap">
+                @if (Model.IsPublished)
+                {
+                    <span class="badge badge-published">Yayında</span>
+                }
+                else
+                {
+                    <span class="badge badge-draft">Taslak</span>
+                }
+                @if (Model.IsLocked)
+                {
+                    <span class="badge badge-locked">Sorular kilitli</span>
+                }
+            </div>
+            <h1 class="page-title">@Model.Title</h1>
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <p class="text-muted mb-1">@Model.Description</p>
+            }
+            <p class="text-muted small mb-0">
+                @Model.Questions.Count soru · Varsayılan süre @Model.DefaultTimeLimitSeconds sn ·
+                Toplam @Model.Questions.Sum(q => q.Points) puan
+            </p>
+        </div>
+
+        <div class="d-flex flex-wrap align-items-start gap-2">
+            <a class="btn btn-outline-primary btn-sm" asp-action="Edit" asp-route-id="@Model.Id">Bilgileri düzenle</a>
+
+            <form asp-action="Publish" asp-route-id="@Model.Id" method="post">
+                <input type="hidden" name="publish" value="@(Model.IsPublished ? "false" : "true")" />
+                @if (Model.IsPublished)
+                {
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">Yayından kaldır</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-success btn-sm fw-bold">Yayınla</button>
+                }
+            </form>
+
+            <form asp-action="Duplicate" asp-route-id="@Model.Id" method="post">
+                <button type="submit" class="btn btn-outline-secondary btn-sm">Kopyala</button>
+            </form>
+
+            @if (!Model.IsLocked)
+            {
+                <form asp-action="Delete" asp-route-id="@Model.Id" method="post"
+                      data-confirm="Bu quiz ve tüm soruları kalıcı olarak silinecek. Emin misiniz?">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>
+                </form>
+            }
+        </div>
+    </div>
+
+    @if (Model.IsLocked)
+    {
+        <div class="alert alert-warning mt-3 mb-0 small">
+            @QuizRules.LockedMessage
+        </div>
+    }
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h4 fw-bold mb-0">Sorular</h2>
+    @if (canEditQuestions)
+    {
+        <a class="btn btn-primary" asp-action="AddQuestion" asp-route-quizId="@Model.Id">+ Soru ekle</a>
+    }
+</div>
+
+@if (Model.Questions.Count == 0)
+{
+    <div class="qa-card empty-state">
+        <h3 class="h5 fw-bold">Bu quizde henüz soru yok</h3>
+        <p>Yayınlamak için en az bir soru eklemelisin.</p>
+        <a class="btn btn-primary" asp-action="AddQuestion" asp-route-quizId="@Model.Id">İlk soruyu ekle</a>
+    </div>
+}
+
+@for (var qi = 0; qi < Model.Questions.Count; qi++)
+{
+    var question = Model.Questions[qi];
+    <div class="qa-card question-card mb-3">
+        <div class="d-flex gap-3 align-items-start">
+            <span class="question-number">@question.OrderNo</span>
+            <div class="flex-grow-1">
+                <div class="d-flex flex-wrap justify-content-between gap-2">
+                    <p class="fw-bold mb-1">@question.Text</p>
+                    <span class="text-muted small text-nowrap">⏱ @question.TimeLimitSeconds sn · ★ @question.Points puan</span>
+                </div>
+
+                <ul class="option-list">
+                    @for (var oi = 0; oi < question.Options.Count; oi++)
+                    {
+                        var option = question.Options[oi];
+                        <li class="option-item opt-@(oi + 1) @(option.IsCorrect ? "correct" : "")">
+                            <span class="opt-letter">@letters[oi]</span>
+                            <span>@option.Text</span>
+                            @if (option.IsCorrect)
+                            {
+                                <span class="check" title="Doğru cevap" aria-label="Doğru cevap">✓</span>
+                            }
+                        </li>
+                    }
+                </ul>
+
+                @if (canEditQuestions)
+                {
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        <a class="btn btn-outline-primary btn-sm" asp-action="EditQuestion" asp-route-id="@question.Id">Düzenle</a>
+
+                        <form asp-action="MoveQuestion" method="post">
+                            <input type="hidden" name="id" value="@question.Id" />
+                            <input type="hidden" name="quizId" value="@Model.Id" />
+                            <input type="hidden" name="direction" value="-1" />
+                            <button type="submit" class="btn btn-outline-secondary btn-sm" disabled="@(qi == 0)" aria-label="Yukarı taşı">↑</button>
+                        </form>
+                        <form asp-action="MoveQuestion" method="post">
+                            <input type="hidden" name="id" value="@question.Id" />
+                            <input type="hidden" name="quizId" value="@Model.Id" />
+                            <input type="hidden" name="direction" value="1" />
+                            <button type="submit" class="btn btn-outline-secondary btn-sm" disabled="@(qi == Model.Questions.Count - 1)" aria-label="Aşağı taşı">↓</button>
+                        </form>
+
+                        <form asp-action="DeleteQuestion" method="post" data-confirm="Bu soru silinecek. Emin misiniz?">
+                            <input type="hidden" name="id" value="@question.Id" />
+                            <input type="hidden" name="quizId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

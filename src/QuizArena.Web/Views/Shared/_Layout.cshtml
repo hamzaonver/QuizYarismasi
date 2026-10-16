@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] · QuizArena</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md qa-navbar">
+            <div class="container">
+                <a class="navbar-brand qa-brand" asp-controller="Home" asp-action="Index">
+                    <span class="qa-brand-mark">Q</span> QuizArena
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                        aria-controls="mainNav" aria-expanded="false" aria-label="Menüyü aç/kapat">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto">
+                        @if (User.IsInRole("Teacher"))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Quiz" asp-action="Index">Quizlerim</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Quiz" asp-action="Create">Yeni Quiz</a></li>
+                        }
+                        else if (User.IsInRole("Student"))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Student" asp-action="Index">Panelim</a></li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav align-items-md-center gap-2">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <span class="qa-user">
+                                    @User.Identity.Name
+                                    <span class="badge qa-role-badge">@(User.IsInRole("Teacher") ? "Öğretmen" : "Öğrenci")</span>
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-light">Çıkış</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Login">Giriş</a></li>
+                            <li class="nav-item"><a class="btn btn-sm btn-light fw-bold" asp-controller="Account" asp-action="Register">Kayıt ol</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container py-4" role="main">
+        @if (TempData["Success"] is string success)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @success
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+            </div>
+        }
+        @if (TempData["Error"] is string error)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @error
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+            </div>
+        }
+
+        @RenderBody()
+    </main>
+
+    <footer class="qa-footer">
+        <div class="container">QuizArena · Sınıf İçi Oyunlaştırılmış Quiz Yarışması (P60)</div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

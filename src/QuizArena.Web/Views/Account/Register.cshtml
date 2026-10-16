@@ -1,0 +1,59 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Kayıt ol";
+}
+
+<div class="auth-wrap">
+    <div class="qa-card">
+        <h1 class="page-title h3">Kayıt ol</h1>
+        <p class="page-subtitle">Birkaç saniyede hesabını oluştur.</p>
+
+        <form asp-action="Register" method="post" novalidate>
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2" role="alert"></div>
+
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control" autocomplete="name" autofocus />
+                <span asp-validation-for="FullName" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" autocomplete="email" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" autocomplete="new-password" />
+                <div class="hint">En az 8 karakter; büyük harf, küçük harf ve rakam içermeli.</div>
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ConfirmPassword" class="form-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Role" class="form-label"></label>
+                <select asp-for="Role" class="form-select">
+                    <option value="Student">Öğrenci</option>
+                    <option value="Teacher">Öğretmen</option>
+                </select>
+            </div>
+            <div class="mb-3 d-none" id="invite-code-group">
+                <label asp-for="TeacherInviteCode" class="form-label"></label>
+                <input asp-for="TeacherInviteCode" class="form-control" autocomplete="off" />
+                <div class="hint">Öğretmen hesabı açmak için okul yöneticisinden aldığın kodu gir.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2">Hesap oluştur</button>
+        </form>
+
+        <p class="text-center mt-3 mb-0">
+            Zaten hesabın var mı? <a asp-action="Login">Giriş yap</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,56 @@
+@model List<QuizListDto>
+@{
+    ViewData["Title"] = "Quizlerim";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div>
+        <h1 class="page-title">Quizlerim</h1>
+        <p class="page-subtitle mb-0">@Model.Count quiz · @Model.Count(q => q.IsPublished) yayında</p>
+    </div>
+    <a class="btn btn-primary" asp-action="Create">+ Yeni quiz</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="qa-card empty-state">
+        <h2 class="h5 fw-bold">Henüz quizin yok</h2>
+        <p>İlk quizini oluştur, soruları ekle ve sınıfınla yarış.</p>
+        <a class="btn btn-primary" asp-action="Create">İlk quizimi oluştur</a>
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var quiz in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="qa-card quiz-card">
+                    <div class="d-flex gap-2 mb-2 flex-wrap">
+                        @if (quiz.IsPublished)
+                        {
+                            <span class="badge badge-published">Yayında</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-draft">Taslak</span>
+                        }
+                        @if (quiz.SessionCount > 0)
+                        {
+                            <span class="badge badge-locked" title="Oturumda kullanıldığı için sorular kilitli">@quiz.SessionCount oturum</span>
+                        }
+                    </div>
+                    <h2>@quiz.Title</h2>
+                    @if (!string.IsNullOrEmpty(quiz.Description))
+                    {
+                        <p class="meta mb-2">@quiz.Description</p>
+                    }
+                    <p class="meta mt-auto mb-3">
+                        @quiz.QuestionCount soru · Son değişiklik @((quiz.UpdatedAt ?? quiz.CreatedAt).ToLocalTime().ToString("dd.MM.yyyy HH:mm"))
+                    </p>
+                    <a class="btn btn-outline-primary btn-sm align-self-start" asp-action="Details" asp-route-id="@quiz.Id">Aç ve düzenle</a>
+                </div>
+            </div>
+        }
+    </div>
+}

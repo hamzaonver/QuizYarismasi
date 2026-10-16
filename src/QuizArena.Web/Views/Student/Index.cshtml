@@ -1,0 +1,15 @@
+@{
+    ViewData["Title"] = "Öğrenci paneli";
+}
+
+<h1 class="page-title">Merhaba, @User.Identity?.Name 👋</h1>
+<p class="page-subtitle">Öğretmeninin ekranındaki katılım kodunu girerek oturuma katılabilirsin.</p>
+
+<div class="qa-card join-box">
+    <form>
+        <label for="joinCode" class="form-label fw-bold">Katılım kodu</label>
+        <input id="joinCode" class="form-control join-code-input mb-3" maxlength="6" placeholder="ABC123" disabled />
+        <button type="button" class="btn btn-primary w-100 py-2" disabled>Oturuma katıl</button>
+    </form>
+    <p class="hint mt-3 mb-0">Canlı oturuma katılım Hafta 7'de etkinleşecek.</p>
+</div>

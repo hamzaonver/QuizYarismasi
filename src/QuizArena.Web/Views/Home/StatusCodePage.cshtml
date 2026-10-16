@@ -1,0 +1,17 @@
+@{
+    var code = (int)(ViewBag.Code ?? 0);
+    var (title, message) = code switch
+    {
+        404 => ("Sayfa bulunamadı", "Aradığınız kayıt silinmiş ya da hiç var olmamış olabilir."),
+        403 => ("Erişim engellendi", "Bu sayfayı görüntüleme yetkiniz yok."),
+        _ => ("Bir sorun oluştu", "İsteğiniz tamamlanamadı.")
+    };
+    ViewData["Title"] = title;
+}
+
+<div class="qa-card text-center py-5" style="max-width:560px;margin:2rem auto;">
+    <div class="status-code">@code</div>
+    <h1 class="h3 fw-bold mt-3">@title</h1>
+    <p class="text-muted">@message</p>
+    <a class="btn btn-primary mt-2" asp-controller="Home" asp-action="Index">Ana sayfaya dön</a>
+</div>

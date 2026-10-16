@@ -1,0 +1,129 @@
+/* ===== QuizArena tema ===== */
+:root {
+    --qa-primary: #6c2bd9;
+    --qa-primary-dark: #4c1d95;
+    --qa-accent: #e11d74;
+    --qa-bg: #f5f3fb;
+    --qa-card: #ffffff;
+    --qa-text: #1f1534;
+    --qa-muted: #6b6380;
+    --qa-border: #e4def3;
+    --qa-opt-1: #e11d48;
+    --qa-opt-2: #2563eb;
+    --qa-opt-3: #d97706;
+    --qa-opt-4: #059669;
+    --qa-opt-5: #7c3aed;
+    --qa-opt-6: #0891b2;
+}
+
+html { font-size: 15px; }
+@media (min-width: 768px) { html { font-size: 16px; } }
+
+body {
+    font-family: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--qa-bg);
+    color: var(--qa-text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main { flex: 1; }
+
+/* ----- Üst menü ----- */
+.qa-navbar {
+    background: linear-gradient(90deg, var(--qa-primary-dark), var(--qa-primary) 60%, var(--qa-accent));
+}
+.qa-navbar .nav-link { color: rgba(255, 255, 255, .85); font-weight: 600; }
+.qa-navbar .nav-link:hover { color: #fff; }
+.qa-navbar .navbar-toggler { border-color: rgba(255, 255, 255, .5); }
+.qa-navbar .navbar-toggler-icon { filter: invert(1); }
+.qa-brand { color: #fff !important; font-weight: 800; letter-spacing: .3px; display: flex; align-items: center; gap: .5rem; }
+.qa-brand-mark {
+    display: inline-grid; place-items: center;
+    width: 32px; height: 32px; border-radius: 9px;
+    background: #fff; color: var(--qa-primary); font-weight: 800;
+    transform: rotate(-8deg);
+}
+.qa-user { color: #fff; font-weight: 600; }
+.qa-role-badge { background: rgba(255, 255, 255, .2); font-weight: 700; margin-left: .25rem; }
+
+.qa-footer { color: var(--qa-muted); font-size: .85rem; padding: 1.25rem 0; border-top: 1px solid var(--qa-border); }
+
+/* ----- Ortak ----- */
+.btn-primary { background: var(--qa-primary); border-color: var(--qa-primary); font-weight: 700; }
+.btn-primary:hover, .btn-primary:focus { background: var(--qa-primary-dark); border-color: var(--qa-primary-dark); }
+.btn { border-radius: 10px; }
+.form-control, .form-select { border-radius: 10px; border-color: var(--qa-border); }
+.form-control:focus, .form-select:focus { border-color: var(--qa-primary); box-shadow: 0 0 0 .2rem rgba(108, 43, 217, .15); }
+.btn:focus-visible { outline: 3px solid var(--qa-accent); outline-offset: 2px; }
+
+.qa-card {
+    background: var(--qa-card);
+    border: 1px solid var(--qa-border);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(76, 29, 149, .06);
+    padding: 1.5rem;
+}
+
+.page-title { font-weight: 800; margin-bottom: .25rem; }
+.page-subtitle { color: var(--qa-muted); margin-bottom: 1.5rem; }
+
+/* ----- Giriş/Kayıt ----- */
+.auth-wrap { max-width: 460px; margin: 1rem auto; }
+.demo-accounts { font-size: .85rem; color: var(--qa-muted); background: #faf8ff; border: 1px dashed var(--qa-border); border-radius: 12px; padding: .75rem 1rem; }
+.demo-accounts code { color: var(--qa-primary-dark); }
+
+/* ----- Ana sayfa ----- */
+.hero {
+    background: linear-gradient(135deg, var(--qa-primary-dark), var(--qa-primary) 55%, var(--qa-accent));
+    color: #fff; border-radius: 24px; padding: 3rem 2rem; position: relative; overflow: hidden;
+}
+.hero h1 { font-weight: 800; font-size: clamp(1.9rem, 4vw, 3rem); }
+.hero p { font-size: 1.15rem; opacity: .92; max-width: 560px; }
+.hero-shapes { position: absolute; right: 2rem; top: 50%; transform: translateY(-50%); display: grid; grid-template-columns: repeat(2, 70px); gap: 12px; }
+.hero-shapes span { width: 70px; height: 70px; border-radius: 16px; opacity: .9; }
+@media (max-width: 767px) { .hero-shapes { display: none; } }
+.feature { text-align: left; }
+.feature h3 { font-size: 1.05rem; font-weight: 800; }
+.feature p { color: var(--qa-muted); margin: 0; }
+
+/* ----- Quiz listesi ----- */
+.quiz-card { transition: transform .15s ease, box-shadow .15s ease; height: 100%; display: flex; flex-direction: column; }
+.quiz-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(76, 29, 149, .12); }
+.quiz-card h2 { font-size: 1.15rem; font-weight: 800; }
+.quiz-card .meta { color: var(--qa-muted); font-size: .9rem; }
+.badge-draft { background: #efeaf9; color: var(--qa-muted); }
+.badge-published { background: #dcfce7; color: #166534; }
+.badge-locked { background: #fef3c7; color: #92400e; }
+
+.empty-state { text-align: center; padding: 3rem 1rem; color: var(--qa-muted); }
+
+/* ----- Soru kartları ----- */
+.question-card { border-left: 6px solid var(--qa-primary); }
+.question-number {
+    display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 10px;
+    background: var(--qa-primary); color: #fff; font-weight: 800; flex-shrink: 0;
+}
+.option-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .5rem; padding: 0; list-style: none; margin: .75rem 0 0; }
+.option-item { border-radius: 10px; padding: .5rem .75rem; color: #fff; font-weight: 600; display: flex; align-items: center; gap: .5rem; }
+.option-item.correct { box-shadow: 0 0 0 3px #fff, 0 0 0 5px #16a34a; }
+.option-item .check { margin-left: auto; background: #fff; color: #16a34a; border-radius: 50%; width: 22px; height: 22px; display: grid; place-items: center; font-size: .8rem; }
+.opt-1 { background: var(--qa-opt-1); } .opt-2 { background: var(--qa-opt-2); } .opt-3 { background: var(--qa-opt-3); }
+.opt-4 { background: var(--qa-opt-4); } .opt-5 { background: var(--qa-opt-5); } .opt-6 { background: var(--qa-opt-6); }
+.opt-letter { font-weight: 800; opacity: .85; }
+
+/* ----- Soru formu ----- */
+.option-row { display: flex; align-items: center; gap: .6rem; margin-bottom: .6rem; }
+.option-row .swatch { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; color: #fff; font-weight: 800; flex-shrink: 0; }
+.option-row .form-check-input { width: 1.4rem; height: 1.4rem; margin: 0; flex-shrink: 0; cursor: pointer; }
+.option-row .form-check-input:checked { background-color: #16a34a; border-color: #16a34a; }
+.option-row.is-hidden { display: none; }
+.hint { color: var(--qa-muted); font-size: .85rem; }
+
+/* ----- Öğrenci paneli ----- */
+.join-box { max-width: 480px; margin: 0 auto; text-align: center; }
+.join-code-input { font-size: 2rem; font-weight: 800; letter-spacing: .4rem; text-align: center; text-transform: uppercase; }
+
+/* ----- Hata sayfaları ----- */
+.status-code { font-size: 5rem; font-weight: 800; color: var(--qa-primary); line-height: 1; }

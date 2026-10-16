@@ -1,0 +1,59 @@
+@model QuizFormViewModel
+@{
+    var isNew = Model.Id == null;
+    ViewData["Title"] = isNew ? "Yeni quiz" : "Quizi düzenle";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index">Quizlerim</a></li>
+        @if (!isNew)
+        {
+            <li class="breadcrumb-item"><a asp-action="Details" asp-route-id="@Model.Id">@Model.Title</a></li>
+        }
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
+
+<div class="qa-card" style="max-width:720px;">
+    <h1 class="page-title h3">@ViewData["Title"]</h1>
+    <p class="page-subtitle">@(isNew ? "Önce quizin genel bilgilerini gir; soruları bir sonraki adımda ekleyeceksin." : "Başlık, açıklama ve varsayılan süreyi güncelle.")</p>
+
+    <form asp-action="@(isNew ? "Create" : "Edit")" asp-route-id="@Model.Id" method="post" novalidate>
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2" role="alert"></div>
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control" placeholder="ör. Bilgisayar Donanımı Temelleri" autofocus />
+            <span asp-validation-for="Title" class="text-danger small"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="3" placeholder="İsteğe bağlı"></textarea>
+            <span asp-validation-for="Description" class="text-danger small"></span>
+        </div>
+        <div class="mb-4" style="max-width:260px;">
+            <label asp-for="DefaultTimeLimitSeconds" class="form-label"></label>
+            <input asp-for="DefaultTimeLimitSeconds" class="form-control" type="number"
+                   min="@QuizRules.MinTime" max="@QuizRules.MaxTime" />
+            <div class="hint">Yeni sorular bu süreyle başlar; soru bazında değiştirebilirsin.</div>
+            <span asp-validation-for="DefaultTimeLimitSeconds" class="text-danger small"></span>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">@(isNew ? "Oluştur ve soru ekle" : "Kaydet")</button>
+            @if (isNew)
+            {
+                <a class="btn btn-outline-secondary" asp-action="Index">Vazgeç</a>
+            }
+            else
+            {
+                <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Vazgeç</a>
+            }
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

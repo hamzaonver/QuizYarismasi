@@ -1,0 +1,47 @@
+@model LoginViewModel
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
+@{
+    ViewData["Title"] = "Giriş";
+}
+
+<div class="auth-wrap">
+    <div class="qa-card">
+        <h1 class="page-title h3">Giriş yap</h1>
+        <p class="page-subtitle">QuizArena hesabınla devam et.</p>
+
+        <form asp-action="Login" method="post" novalidate>
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2" role="alert"></div>
+            <input type="hidden" asp-for="ReturnUrl" />
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" autocomplete="username" autofocus />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" autocomplete="current-password" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2">Giriş yap</button>
+        </form>
+
+        <p class="text-center mt-3 mb-0">
+            Hesabın yok mu? <a asp-action="Register">Kayıt ol</a>
+        </p>
+    </div>
+
+    @if (Env.IsDevelopment())
+    {
+        <div class="demo-accounts mt-3">
+            <strong>Geliştirme ortamı demo hesapları</strong> (sentetik veri):<br />
+            Öğretmen: <code>ogretmen@@quizarena.test</code> / <code>Ogretmen123!</code><br />
+            Öğrenci: <code>ogrenci1@@quizarena.test</code> / <code>Ogrenci123!</code>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Hoş geldiniz";
+}
+
+<section class="hero mb-4">
+    <h1>Sınıfta yarışarak öğren.</h1>
+    <p class="mt-3">Öğretmen quizini hazırlar, öğrenciler katılım koduyla bağlanır; hızlı ve doğru cevaplayan lider tablosunda yükselir.</p>
+    <div class="d-flex flex-wrap gap-2 mt-4">
+        <a class="btn btn-light btn-lg fw-bold" asp-controller="Account" asp-action="Register">Hemen kayıt ol</a>
+        <a class="btn btn-outline-light btn-lg" asp-controller="Account" asp-action="Login">Giriş yap</a>
+    </div>
+    <div class="hero-shapes" aria-hidden="true">
+        <span class="opt-1"></span><span class="opt-2"></span>
+        <span class="opt-3"></span><span class="opt-4"></span>
+    </div>
+</section>
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="qa-card feature h-100">
+            <h3>Quiz oluştur</h3>
+            <p>Soruları, şıkları, doğru cevabı ve süreyi belirle. Taslak olarak sakla, hazır olunca yayınla.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="qa-card feature h-100">
+            <h3>Canlı oturum</h3>
+            <p>Katılım koduyla sınıf aynı anda bağlanır; sorular herkesin ekranına eş zamanlı düşer. <span class="badge badge-draft">Yakında</span></p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="qa-card feature h-100">
+            <h3>Lider tablosu ve analiz</h3>
+            <p>Süre bonuslu puanlama, güç kartları ve oturum sonu soru zorluk analizi. <span class="badge badge-draft">Yakında</span></p>
+        </div>
+    </div>
+</div>

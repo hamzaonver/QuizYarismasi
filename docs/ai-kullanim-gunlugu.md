@@ -1,28 +1,6 @@
 # Yapay Zekâ Kullanım Günlüğü
 
-> Ders her hafta yapay zekâ kullanımının belgelenmesini istiyor (Hafta 8'de "güncel AI kullanım günlüğü" teslim edilecek).
-> Her kullanımda: ne istendi, ne alındı, ne değiştirildi/doğrulandı, ve neyi **senin** yaptığın yazılmalı.
-> Aşağıdaki ilk kayıt bu iskeletin hazırlanışını anlatıyor; kendi notlarınla düzenle ve sonraki haftalarda devam ettir.
+Güncel günlük artık **[rapor-ve-ai-gunlugu/](rapor-ve-ai-gunlugu/)** klasöründe:
 
-| Tarih | Hafta | Araç | Amaç | AI'nın katkısı | Benim doğrulamam / değişikliğim |
-|---|---|---|---|---|---|
-| 15.10.2026 | 3‑6 | Claude | Proje iskeleti, mimari önerisi, ER taslağı | Katmanlı çözüm yapısı, varlıklar, EF Core ayarları, repository'ler, kimlik doğrulama, quiz modülü, dokümantasyon taslakları | *(doldur: hangi dosyaları okudun, ne değiştirdin, hangi kuralı kendin ekledin, neyi test ettin)* |
-| 15.10.2026 | 3‑6 | Claude | Kodu sadeleştirme | Fluent API ayarları tek DbContext dosyasında toplandı, servis arayüzleri kaldırıldı, DTO'lar basit sınıflara çevrildi, açıklamalar sadeleştirildi | *(doldur)* |
-| 05.11.2026 | 7 | Claude | Canlı oturum ve katılım modülü | SessionService (oturum aç/katıl/başlat/sonraki/bitir/iptal), katılım kodu üretimi, öğretmen ve öğrenci oturum ekranları, 3 sn'lik durum kontrolü (polling) | *(doldur: iki tarayıcıyla denedim mi, hangi kuralı kendim değiştirdim)* |
-| | | | | | |
-
-## Kayıt şablonu (detaylı)
-
-### [Tarih] — [Konu]
-- **Sorduğum / istediğim:**
-- **Aldığım öneri:**
-- **Kabul ettiklerim ve nedeni:**
-- **Reddettiklerim / değiştirdiklerim ve nedeni:**
-- **Nasıl doğruladım:** (çalıştırdım, test ettim, dokümana baktım…)
-- **Bu kısmı satır satır açıklayabilir miyim?** Evet / Henüz değil → çalışacağım
-
-## Kurallar (kendime not)
-
-- AI çıktısını körü körüne kopyalamıyorum; açıklayamadığım kodu taşımıyorum.
-- Gizli anahtar, gerçek kişisel veri AI aracına verilmez.
-- Her haftanın "Öğrencinin kendi geliştireceği bölümler" maddesini kendim yazıyorum.
+- [ai-kullanim-gunlugu.md](rapor-ve-ai-gunlugu/ai-kullanim-gunlugu.md) (yazdırılabilir: `AI-Kullanim-Gunlugu.docx`)
+- [haftalik-ilerleme-raporu.md](rapor-ve-ai-gunlugu/haftalik-ilerleme-raporu.md) (yazdırılabilir: `Haftalik-Ilerleme-Raporu.docx`)

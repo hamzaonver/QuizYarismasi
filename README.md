@@ -108,4 +108,4 @@ Ayrıntı: [docs/mimari.md](docs/mimari.md) · [docs/er-diyagrami.md](docs/er-di
 
 ## Yapay zekâ kullanımı
 
-Projede yapay zekâ destekli araçlar kullanılmaktadır; her kullanım [docs/ai-kullanim-gunlugu.md](docs/ai-kullanim-gunlugu.md) dosyasında belgelenir.
+Projede yapay zekâ destekli araçlar kullanılmaktadır; her kullanım [docs/rapor-ve-ai-gunlugu/](docs/rapor-ve-ai-gunlugu/) klasöründe (AI günlüğü + haftalık ilerleme raporu) belgelenir.

@@ -1,0 +1,14 @@
+@model SessionStatus
+@* Oturum durumunu Türkçe etiket olarak gösterir *@
+@if (Model == SessionStatus.Waiting)
+{
+    <span class="badge status-waiting">Bekleme salonu</span>
+}
+else if (Model == SessionStatus.Active)
+{
+    <span class="badge status-active">Devam ediyor</span>
+}
+else
+{
+    <span class="badge status-finished">Bitti</span>
+}

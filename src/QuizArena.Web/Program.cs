@@ -22,11 +22,13 @@ builder.Services.AddDbContext<QuizArenaDbContext>(options => options.UseSqlite(c
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IQuizRepository, QuizRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+builder.Services.AddScoped<ISessionRepository, SessionRepository>(); // Hafta 7
 
 // ---------- Servisler (İş katmanı) ----------
 builder.Services.AddSingleton(authSettings);
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<QuizService>();
+builder.Services.AddScoped<SessionService>(); // Hafta 7
 
 builder.Services.AddControllersWithViews(options =>
 {

@@ -127,3 +127,43 @@ main { flex: 1; }
 
 /* ----- Hata sayfaları ----- */
 .status-code { font-size: 5rem; font-weight: 800; color: var(--qa-primary); line-height: 1; }
+
+/* ===== Hafta 7: Canlı oturum ===== */
+.status-waiting { background: #fef3c7; color: #92400e; }
+.status-active { background: #dcfce7; color: #166534; }
+.status-finished { background: #e5e7eb; color: #374151; }
+
+.join-code-display {
+    font-size: clamp(2.4rem, 7vw, 3.6rem);
+    font-weight: 800;
+    letter-spacing: .5rem;
+    color: var(--qa-primary-dark);
+    background: #f5f3ff;
+    border: 2px dashed var(--qa-primary);
+    border-radius: 16px;
+    padding: .5rem 1rem;
+    font-family: "Nunito", monospace;
+}
+.join-code-display.small-code { font-size: 1.6rem; letter-spacing: .3rem; }
+
+.participant-list { list-style: none; padding: 0; margin: 0 0 .5rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+.participant-list li {
+    background: #f5f3ff; color: var(--qa-primary-dark); font-weight: 700;
+    border: 1px solid var(--qa-border); border-radius: 999px; padding: .35rem .9rem;
+    animation: pop-in .25s ease-out;
+}
+@keyframes pop-in { from { transform: scale(.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.play-wrap { max-width: 640px; margin: 0 auto; }
+.play-options { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.play-options .option-item { min-height: 72px; font-size: 1.05rem; }
+@media (max-width: 480px) { .play-options { grid-template-columns: 1fr; } }
+
+.waiting-dots { display: inline-flex; gap: .5rem; }
+.waiting-dots span {
+    width: 14px; height: 14px; border-radius: 50%; background: var(--qa-primary);
+    animation: bounce 1.2s infinite ease-in-out;
+}
+.waiting-dots span:nth-child(2) { animation-delay: .2s; }
+.waiting-dots span:nth-child(3) { animation-delay: .4s; }
+@keyframes bounce { 0%, 80%, 100% { transform: scale(.5); opacity: .5; } 40% { transform: scale(1); opacity: 1; } }

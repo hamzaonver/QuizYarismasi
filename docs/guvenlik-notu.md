@@ -22,4 +22,4 @@
 - **Rol değişince oturum:** Çerezdeki rol, oturum süresi dolana kadar geçerli. Rol/şifre değişikliğinde oturumu düşürmek için "security stamp" kontrolü eklenebilir.
 - **Kilitleme ile hizmet engelleme:** Saldırgan başkasının e‑postasıyla bilerek 5 hatalı deneme yapıp hesabı kilitleyebilir. İleride IP bazlı hız sınırı (rate limiting, .NET 8'de hazır `AddRateLimiter`) eklenebilir.
 - **Parola sıfırlama** henüz yok (e‑posta servisi gerektirir).
-- Misafir katılımı (Hafta 7) için takma ad filtresi ve oturum kodu tahmin edilemezliği ayrıca değerlendirilecek.
+- Hafta 7: Katılım kodu 6 karakter ve rastgele (karışan 0/O, 1/I yok), benzersizliği kontrol ediliyor. Katılım sadece giriş yapmış öğrenciyle; `UserId` formdan değil giriş çerezinden alınıyor. Öğrenci ekranına doğru cevap bilgisi gönderilmiyor.

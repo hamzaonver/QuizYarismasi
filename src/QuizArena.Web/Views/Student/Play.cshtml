@@ -1,0 +1,72 @@
+@model StudentSessionDto
+@{
+    ViewData["Title"] = Model.QuizTitle;
+    var letters = "ABCDEF";
+}
+
+<div class="play-wrap">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a asp-action="Index" class="small">← Panelim</a>
+        <partial name="_SessionStatusBadge" model="Model.Status" />
+    </div>
+
+    <div class="qa-card text-center mb-3">
+        <h1 class="h4 fw-bold mb-1">@Model.QuizTitle</h1>
+        <p class="text-muted mb-0">Takma adın: <strong>@Model.MyNickname</strong></p>
+    </div>
+
+    @if (Model.Status == SessionStatus.Waiting)
+    {
+        <div class="qa-card text-center py-5">
+            <div class="waiting-dots mb-3"><span></span><span></span><span></span></div>
+            <h2 class="h4 fw-bold">Bekleme salonundasın</h2>
+            <p class="text-muted mb-0">Öğretmen oturumu başlatınca sorular burada görünecek.</p>
+            <p class="mt-3 mb-0"><span class="badge bg-secondary fs-6" id="participant-count">@Model.ParticipantCount</span> kişi katıldı</p>
+        </div>
+    }
+    else if (Model.Status == SessionStatus.Active && Model.CurrentQuestion != null)
+    {
+        var q = Model.CurrentQuestion;
+        <div class="qa-card">
+            <p class="text-muted fw-bold mb-2">Soru @q.OrderNo / @Model.QuestionCount · ⏱ @q.TimeLimitSeconds sn</p>
+            <p class="fs-4 fw-bold mb-3">@q.Text</p>
+
+            @* Öğrenciye sadece şık metinleri geliyor, doğru cevap bilgisi gönderilmiyor *@
+            <div class="play-options">
+                @for (int i = 0; i < q.Options.Count; i++)
+                {
+                    <div class="option-item opt-@(i + 1)">
+                        <span class="opt-letter">@letters[i]</span>
+                        <span>@q.Options[i]</span>
+                    </div>
+                }
+            </div>
+            <p class="hint text-center mt-3 mb-0">Cevap verme 9. haftada (gerçek zamanlı bağlantı ile) eklenecek.</p>
+        </div>
+    }
+    else
+    {
+        <div class="qa-card text-center py-5">
+            <div class="fs-1 mb-2">🏁</div>
+            <h2 class="h4 fw-bold">Oturum sona erdi</h2>
+            <p class="text-muted mb-0">Katıldığın için teşekkürler! Puanların 11. haftada eklenecek.</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @if (Model.Status != SessionStatus.Finished)
+    {
+        <script>
+            // Her 3 saniyede bir öğretmen bir sonraki soruya geçti mi diye bakıyor
+            startStatePolling(
+                '@Url.Action("PlayState", new { id = Model.SessionId })',
+                '@Model.Status',
+                @Model.CurrentQuestionIndex,
+                function (data) {
+                    var count = document.getElementById("participant-count");
+                    if (count) count.textContent = data.participantCount;
+                });
+        </script>
+    }
+}

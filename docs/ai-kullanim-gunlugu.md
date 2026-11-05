@@ -8,6 +8,7 @@
 |---|---|---|---|---|---|
 | 15.10.2026 | 3‑6 | Claude | Proje iskeleti, mimari önerisi, ER taslağı | Katmanlı çözüm yapısı, varlıklar, EF Core ayarları, repository'ler, kimlik doğrulama, quiz modülü, dokümantasyon taslakları | *(doldur: hangi dosyaları okudun, ne değiştirdin, hangi kuralı kendin ekledin, neyi test ettin)* |
 | 15.10.2026 | 3‑6 | Claude | Kodu sadeleştirme | Fluent API ayarları tek DbContext dosyasında toplandı, servis arayüzleri kaldırıldı, DTO'lar basit sınıflara çevrildi, açıklamalar sadeleştirildi | *(doldur)* |
+| 05.11.2026 | 7 | Claude | Canlı oturum ve katılım modülü | SessionService (oturum aç/katıl/başlat/sonraki/bitir/iptal), katılım kodu üretimi, öğretmen ve öğrenci oturum ekranları, 3 sn'lik durum kontrolü (polling) | *(doldur: iki tarayıcıyla denedim mi, hangi kuralı kendim değiştirdim)* |
 | | | | | | |
 
 ## Kayıt şablonu (detaylı)

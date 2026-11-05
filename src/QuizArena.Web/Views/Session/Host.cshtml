@@ -1,0 +1,129 @@
+@model SessionHostDto
+@{
+    ViewData["Title"] = "Oturum · " + Model.QuizTitle;
+    var letters = "ABCDEF";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index">Oturumlarım</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Quiz" asp-action="Details" asp-route-id="@Model.QuizId">@Model.QuizTitle</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Oturum</li>
+    </ol>
+</nav>
+
+<div class="row g-4">
+    @* Sol: katılım kodu ve kontroller *@
+    <div class="col-lg-5">
+        <div class="qa-card text-center">
+            <div class="mb-2"><partial name="_SessionStatusBadge" model="Model.Status" /></div>
+            <h1 class="h4 fw-bold mb-3">@Model.QuizTitle</h1>
+
+            @if (Model.Status == SessionStatus.Waiting)
+            {
+                <p class="text-muted mb-1">Öğrenciler panelden bu kodu girerek katılır</p>
+                <div class="join-code-display" id="join-code">@Model.JoinCode</div>
+
+                <form asp-action="Start" asp-route-id="@Model.Id" method="post" class="mt-3">
+                    <button type="submit" class="btn btn-success btn-lg w-100 fw-bold">▶ Oturumu başlat</button>
+                </form>
+                <form asp-action="Cancel" asp-route-id="@Model.Id" method="post" class="mt-2"
+                      data-confirm="Oturum iptal edilecek ve katılımcılar silinecek. Emin misiniz?">
+                    <button type="submit" class="btn btn-link text-danger">Oturumu iptal et</button>
+                </form>
+            }
+            else if (Model.Status == SessionStatus.Active)
+            {
+                <p class="text-muted mb-1">Katılım kodu</p>
+                <div class="join-code-display small-code">@Model.JoinCode</div>
+                <p class="fw-bold mt-3 mb-2">Soru @(Model.CurrentQuestionIndex + 1) / @Model.QuestionCount</p>
+
+                <form asp-action="Next" asp-route-id="@Model.Id" method="post">
+                    @if (Model.CurrentQuestionIndex + 1 < Model.QuestionCount)
+                    {
+                        <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">Sonraki soru →</button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">Son soru · Oturumu bitir</button>
+                    }
+                </form>
+                <form asp-action="Finish" asp-route-id="@Model.Id" method="post" class="mt-2"
+                      data-confirm="Oturum şimdi bitirilecek. Emin misiniz?">
+                    <button type="submit" class="btn btn-link text-danger">Oturumu erken bitir</button>
+                </form>
+            }
+            else
+            {
+                <p class="text-muted">Bu oturum sona erdi.</p>
+                @if (Model.EndedAt != null)
+                {
+                    <p class="small text-muted mb-0">Bitiş: @Model.EndedAt.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+                }
+                <p class="hint mt-3 mb-0">Puanlar ve sonuç analizi 11. ve 12. haftalarda eklenecek.</p>
+            }
+        </div>
+    </div>
+
+    @* Sağ: mevcut soru ve katılımcılar *@
+    <div class="col-lg-7">
+        @if (Model.CurrentQuestion != null)
+        {
+            var q = Model.CurrentQuestion;
+            <div class="qa-card question-card mb-4">
+                <div class="d-flex gap-3 align-items-start">
+                    <span class="question-number">@q.OrderNo</span>
+                    <div class="flex-grow-1">
+                        <div class="d-flex flex-wrap justify-content-between gap-2">
+                            <p class="fw-bold fs-5 mb-1">@q.Text</p>
+                            <span class="text-muted small text-nowrap">⏱ @q.TimeLimitSeconds sn · ★ @q.Points puan</span>
+                        </div>
+                        @* Bu ekran sınıfa yansıtılabilir, bu yüzden doğru şık burada işaretlenmiyor *@
+                        <ul class="option-list">
+                            @for (int i = 0; i < q.Options.Count; i++)
+                            {
+                                <li class="option-item opt-@(i + 1)">
+                                    <span class="opt-letter">@letters[i]</span>
+                                    <span>@q.Options[i]</span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="qa-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-bold mb-0">Katılımcılar</h2>
+                <span class="badge bg-secondary fs-6" id="participant-count">@Model.Participants.Count</span>
+            </div>
+
+            <ul class="participant-list" id="participant-list">
+                @foreach (var p in Model.Participants)
+                {
+                    <li>@p.Nickname</li>
+                }
+            </ul>
+            <p class="hint mb-0 @(Model.Participants.Count > 0 ? "d-none" : "")" id="no-participants">
+                Henüz katılan yok. Öğrenciler katıldıkça burada görünecek.
+            </p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @if (Model.Status != SessionStatus.Finished)
+    {
+        <script>
+            // Her 3 saniyede bir durumu kontrol et (Hafta 9'da WebSocket ile anlık olacak)
+            startStatePolling(
+                '@Url.Action("State", new { id = Model.Id })',
+                '@Model.Status',
+                @Model.CurrentQuestionIndex,
+                function (data) {
+                    updateParticipantList(data.participants);
+                });
+        </script>
+    }
+}

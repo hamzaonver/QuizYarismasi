@@ -96,7 +96,7 @@ Ayrıntı: [docs/mimari.md](docs/mimari.md) · [docs/er-diyagrami.md](docs/er-di
 | 4 | Veritabanı tasarımı ve veri erişim katmanı | ✅ [notlar](docs/haftalar/hafta-04.md) |
 | 5 | Kullanıcı yönetimi ve kimlik doğrulama | ✅ [notlar](docs/haftalar/hafta-05.md) · [güvenlik notu](docs/guvenlik-notu.md) |
 | 6 | Çekirdek Modül A: Quiz oluşturma | ✅ [notlar](docs/haftalar/hafta-06.md) |
-| 7 | Çekirdek Modül B: Canlı oturum ve katılım | ⏳ |
+| 7 | Çekirdek Modül B: Canlı oturum ve katılım | ✅ [notlar](docs/haftalar/hafta-07.md) |
 | 8 | VİZE: Ara sürüm (`v0.1.0` etiketi) | ⏳ |
 | 9 | Gerçek zamanlı iletişim (SignalR / WebSocket) | ⏳ |
 | 10 | Yapay zekâ ile otomatik soru üretimi | ⏳ |

@@ -1,3 +1,4 @@
+@model StudentPanelViewModel
 @{
     ViewData["Title"] = "Öğrenci paneli";
 }
@@ -5,11 +6,58 @@
 <h1 class="page-title">Merhaba, @User.Identity?.Name 👋</h1>
 <p class="page-subtitle">Öğretmeninin ekranındaki katılım kodunu girerek oturuma katılabilirsin.</p>
 
-<div class="qa-card join-box">
-    <form>
-        <label for="joinCode" class="form-label fw-bold">Katılım kodu</label>
-        <input id="joinCode" class="form-control join-code-input mb-3" maxlength="6" placeholder="ABC123" disabled />
-        <button type="button" class="btn btn-primary w-100 py-2" disabled>Oturuma katıl</button>
+<div class="qa-card join-box mb-4">
+    <form asp-action="Join" method="post" novalidate>
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 text-start" role="alert"></div>
+
+        <label asp-for="Join.JoinCode" class="form-label fw-bold"></label>
+        <input asp-for="Join.JoinCode" class="form-control join-code-input mb-1" maxlength="6" placeholder="ABC123" autocomplete="off" autofocus />
+        <span asp-validation-for="Join.JoinCode" class="text-danger small d-block mb-2"></span>
+
+        <label asp-for="Join.Nickname" class="form-label fw-bold mt-2"></label>
+        <input asp-for="Join.Nickname" class="form-control text-center mb-1" maxlength="20" />
+        <span asp-validation-for="Join.Nickname" class="text-danger small d-block mb-2"></span>
+
+        <button type="submit" class="btn btn-primary w-100 py-2 mt-2">Oturuma katıl</button>
     </form>
-    <p class="hint mt-3 mb-0">Canlı oturuma katılım Hafta 7'de etkinleşecek.</p>
 </div>
+
+<h2 class="h5 fw-bold mb-3">Katıldığım oturumlar</h2>
+@if (Model.MySessions.Count == 0)
+{
+    <p class="text-muted">Henüz bir oturuma katılmadın.</p>
+}
+else
+{
+    <div class="qa-card p-0 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Quiz</th>
+                        <th>Takma adım</th>
+                        <th>Durum</th>
+                        <th>Tarih</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var s in Model.MySessions)
+                    {
+                        <tr>
+                            <td class="fw-bold">@s.QuizTitle</td>
+                            <td>@s.MyNickname</td>
+                            <td><partial name="_SessionStatusBadge" model="s.Status" /></td>
+                            <td class="text-muted small">@s.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                            <td class="text-end"><a class="btn btn-outline-primary btn-sm" asp-action="Play" asp-route-id="@s.Id">Aç</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

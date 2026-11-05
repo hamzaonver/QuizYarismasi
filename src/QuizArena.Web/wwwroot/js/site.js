@@ -35,3 +35,46 @@ document.addEventListener("DOMContentLoaded", () => {
         toggle();
     }
 });
+
+// ===== Hafta 7: Canlı oturum ekranları =====
+
+// Oturum ekranı 3 saniyede bir sunucuya "durum ne?" diye soruyor.
+// Durum (bekliyor/aktif/bitti) ya da soru değiştiyse sayfayı yeniliyor.
+// Hafta 9'da bunun yerine WebSocket (SignalR) ile anlık bildirim gelecek.
+function startStatePolling(stateUrl, currentStatus, currentQuestionIndex, onUpdate) {
+    setInterval(async function () {
+        try {
+            const response = await fetch(stateUrl, { cache: "no-store" });
+            if (!response.ok) return;
+
+            const data = await response.json();
+
+            if (data.status !== currentStatus || data.currentQuestionIndex !== currentQuestionIndex) {
+                location.reload();
+                return;
+            }
+
+            if (onUpdate) onUpdate(data);
+        } catch (e) {
+            // Bağlantı anlık koptuysa bir sonraki denemeyi bekle
+        }
+    }, 3000);
+}
+
+// Öğretmen ekranındaki katılımcı listesini günceller
+function updateParticipantList(names) {
+    const list = document.getElementById("participant-list");
+    const count = document.getElementById("participant-count");
+    const empty = document.getElementById("no-participants");
+    if (!list) return;
+
+    list.innerHTML = "";
+    names.forEach(function (name) {
+        const li = document.createElement("li");
+        li.textContent = name; // textContent: isimdeki HTML kodu çalışmasın (XSS önlemi)
+        list.appendChild(li);
+    });
+
+    if (count) count.textContent = names.length;
+    if (empty) empty.classList.toggle("d-none", names.length > 0);
+}

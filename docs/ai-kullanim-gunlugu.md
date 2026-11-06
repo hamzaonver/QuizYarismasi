@@ -1,6 +1,11 @@
 # Yapay Zekâ Kullanım Günlüğü
 
-Güncel günlük artık **[rapor-ve-ai-gunlugu/](rapor-ve-ai-gunlugu/)** klasöründe:
+Günlük ve ilerleme raporları **hafta hafta** [rapor-ve-ai-gunlugu/](rapor-ve-ai-gunlugu/) klasöründe tutuluyor:
 
-- [ai-kullanim-gunlugu.md](rapor-ve-ai-gunlugu/ai-kullanim-gunlugu.md) (yazdırılabilir: `AI-Kullanim-Gunlugu.docx`)
-- [haftalik-ilerleme-raporu.md](rapor-ve-ai-gunlugu/haftalik-ilerleme-raporu.md) (yazdırılabilir: `Haftalik-Ilerleme-Raporu.docx`)
+| Hafta | Klasör |
+|---|---|
+| 3 | [hafta-03](rapor-ve-ai-gunlugu/hafta-03/) |
+| 4 | [hafta-04](rapor-ve-ai-gunlugu/hafta-04/) |
+| 5 | [hafta-05](rapor-ve-ai-gunlugu/hafta-05/) |
+| 6 | [hafta-06](rapor-ve-ai-gunlugu/hafta-06/) |
+| 7 | [hafta-07](rapor-ve-ai-gunlugu/hafta-07/) |

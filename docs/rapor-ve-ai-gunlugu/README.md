@@ -1,11 +1,15 @@
-# Rapor ve AI Günlüğü
+# Haftalık Teslimler — İlerleme Raporu ve AI Günlüğü
 
-Dersin **Formlar ve Şablonlar** paketine göre hazırlanan haftalık belgeler.
+Dersin yönergesine göre her hafta **ilerleme raporu** ve **AI kullanım günlüğü** GitHub'a yüklenir (Formlar ve Şablonlar: Şablon 9 ve Şablon 8). Her hafta kendi klasöründe:
 
-| Dosya | Şablon | İçerik |
+| Hafta | Konu | Klasör |
 |---|---|---|
-| `Haftalik-Ilerleme-Raporu.docx` / `haftalik-ilerleme-raporu.md` | Şablon 9 | Hafta 3–7, her hafta ayrı sayfa |
-| `AI-Kullanim-Gunlugu.docx` / `ai-kullanim-gunlugu.md` | Şablon 8 | Yapay zekâ kullanım kayıtları |
+| 3 | Kurulum, Mimari ve Veri Modeli | [hafta-03/](hafta-03/) |
+| 4 | Veritabanı Tasarımı ve Veri Erişim Katmanı | [hafta-04/](hafta-04/) |
+| 5 | Kullanıcı Yönetimi ve Kimlik Doğrulama | [hafta-05/](hafta-05/) |
+| 6 | Çekirdek Modül A: Quiz Oluşturma | [hafta-06/](hafta-06/) |
+| 7 | Çekirdek Modül B: Canlı Oturum ve Katılım + Entegrasyon | [hafta-07/](hafta-07/) |
 
-`.docx` dosyaları yazdırmak / teslim etmek için, `.md` dosyaları GitHub'da okunmak içindir.
-Her hafta sonunda iki dosyaya da yeni hafta eklenir.
+Her klasörde: `Hafta-XX-Ilerleme-Raporu.docx`, `Hafta-XX-AI-Kullanim-Gunlugu.docx` (yazdırmak için) ve aynılarının `.md` sürümleri (GitHub'da okumak için).
+
+Yeni hafta eklerken: önceki haftanın klasörünü kopyala, adını değiştir, içini doldur.

@@ -496,3 +496,6 @@ appsettings.*.local.json
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Hafta 7 test sonucu (yerel)
+scripts/hafta7-test-sonuc.txt

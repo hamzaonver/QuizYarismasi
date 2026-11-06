@@ -41,14 +41,26 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # 2) Siteyi arka planda aç
+$env:ASPNETCORE_ENVIRONMENT = "Development"
 Yaz "`n--- 2) Site açılıyor ---"
-$site = Start-Process dotnet -ArgumentList "run --no-build --project `"$root\src\QuizArena.Web`" --urls $url" -PassThru -WindowStyle Hidden
-$acik = $false
-for ($i = 0; $i -lt 60 -and -not $acik; $i++) {
+$siteLog = Join-Path $PSScriptRoot "hafta7-site-log.txt"
+$web = Join-Path $root "src\QuizArena.Web"
+$site = Start-Process dotnet -ArgumentList "run --no-build --no-launch-profile --urls $url" -WorkingDirectory $web `
+    -PassThru -WindowStyle Hidden -RedirectStandardOutput $siteLog -RedirectStandardError "$siteLog.err"
+$acik = $false; $sonHata = ""
+for ($i = 0; $i -lt 90 -and -not $acik; $i++) {
     Start-Sleep -Seconds 1
-    try { $null = Invoke-WebRequest "$url/" -UseBasicParsing -TimeoutSec 2; $acik = $true } catch { }
+    try { $null = Invoke-WebRequest "$url/" -UseBasicParsing -TimeoutSec 5; $acik = $true }
+    catch { $sonHata = $_.Exception.Message }
+    if ($site.HasExited) { break }
 }
 Kontrol $acik "Site açıldı ($url)"
+if (-not $acik) {
+    Yaz "       Son hata: $sonHata"
+    Yaz "       Site kapandı mı: $($site.HasExited)"
+    if (Test-Path $siteLog) { Get-Content $siteLog -Tail 15 | ForEach-Object { Yaz "       site> $_" } }
+    if (Test-Path "$siteLog.err") { Get-Content "$siteLog.err" -Tail 15 | ForEach-Object { Yaz "       hata> $_" } }
+}
 
 try {
     if ($acik) {

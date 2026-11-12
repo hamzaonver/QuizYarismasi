@@ -1,6 +1,6 @@
 # Mimari — QuizArena
 
-> Hafta 3 teslimi. Görsel hâli: [`mimari.png`](mimari.png).
+> Hafta 3 teslimi, Hafta 8 (v0.8.0) ile güncellendi. Görsel hâli: [`mimari.png`](mimari.png) (Hafta 3 hâli).
 
 ## Teknoloji yığını
 
@@ -20,7 +20,7 @@
 flowchart TB
     U(["Tarayıcı — Öğretmen / Öğrenci"])
     WEB["<b>SUNUM · QuizArena.Web</b><br/>Controller'lar · Razor View'lar · ViewModel'ler<br/>Çerez oturumu · Authorize Roles · CSRF"]
-    BUS["<b>İŞ · QuizArena.Business</b><br/>AuthService · QuizService<br/>Doğrulama ve iş kuralları · Sahiplik kontrolü<br/>BCrypt parola özeti · DTO'lar"]
+    BUS["<b>İŞ · QuizArena.Business</b><br/>AuthService · QuizService · SessionService<br/>Doğrulama ve iş kuralları · Sahiplik kontrolü<br/>BCrypt parola özeti · DTO'lar"]
     DAT["<b>VERİ · QuizArena.Data</b><br/>Repository'ler · QuizArenaDbContext (EF Core)<br/>İlişki / indeks / CHECK ayarları · Migrations · Seed"]
     DB[("SQLite<br/>quizarena.db")]
     ENT[["<b>QuizArena.Entities</b><br/>User · Quiz · Question · AnswerOption<br/>QuizSession · Participant · ParticipantAnswer"]]
@@ -60,19 +60,20 @@ QuizArena/
 ├── README.md
 ├── .gitignore
 ├── docs/                         ← Dokümantasyon (ER, mimari, haftalık notlar, SQL)
-├── scripts/                      ← İlk kurulum betikleri
+├── CHANGELOG.md                  ← Sürüm geçmişi (Hafta 8)
+├── scripts/                      ← İlk kurulum + otomatik testler (hafta7-test, entegrasyon-testi)
 └── src/
     ├── QuizArena.Entities/       ← Varlıklar + Enums/
     ├── QuizArena.Data/
     │   ├── QuizArenaDbContext.cs ← Tablolar + ilişki/indeks/kısıt ayarları (Fluent API)
-    │   ├── Repositories/         ← IRepository<T>, QuizRepository ...
+    │   ├── Repositories/         ← IRepository<T>, QuizRepository, SessionRepository ...
     │   ├── Seed/                 ← Sentetik örnek veri
     │   └── Migrations/           ← (dotnet ef ile oluşturulur)
     ├── QuizArena.Business/
     │   ├── Common/               ← Result (başarı/hata taşıyıcı)
     │   ├── Dtos/                 ← Katmanlar arası veri nesneleri
     │   ├── Helpers/              ← PasswordHelper (BCrypt)
-    │   ├── Services/             ← AuthService, QuizService
+    │   ├── Services/             ← AuthService, QuizService, SessionService (Hafta 7)
     │   └── Validation/           ← İş kuralları ve sabitler
     └── QuizArena.Web/
         ├── Controllers/
@@ -102,3 +103,18 @@ QuizArena/
 5. `QuizService.AddQuestionAsync` → quiz var mı (404) → bu öğretmenin mi (403) → kilitli mi → `QuizValidator` kuralları
 6. `QuestionRepository.AddAsync` + `SaveAsync` → EF Core `INSERT` komutlarını tek işlemde çalıştırır
 7. Başarılıysa quiz sayfasına yönlendirme + "Soru eklendi" mesajı
+
+## Modüller ve veri akışı (Hafta 8 · v0.8.0)
+
+| Modül (hafta) | Controller (Web) | Servis (Business) | Repository (Data) | Tablolar |
+|---|---|---|---|---|
+| Kullanıcı (5) | `AccountController` | `AuthService` | `UserRepository` | `Users` |
+| Quiz oluşturma (6) | `QuizController` | `QuizService` + `QuizValidator` | `QuizRepository`, `QuestionRepository` | `Quizzes`, `Questions`, `AnswerOptions` |
+| Canlı oturum (7) | `SessionController` (öğretmen), `StudentController` (öğrenci) | `SessionService` | `SessionRepository` (+ `QuizRepository`) | `QuizSessions`, `Participants` |
+
+**Modüller birbirine nasıl bağlı:**
+- Giriş yapan kullanıcının **Id'si ve rolü** çerezden okunur (Hafta 5) → Quiz ve Oturum modülleri "bu kayıt bu kullanıcının mı?" kontrolünü bununla yapar.
+- Oturum modülü quizi `QuizRepository` üzerinden okur: sadece **yayındaki ve sorusu olan** quizden oturum açılır (Hafta 6 → 7).
+- Quiz modülü oturum tablosuna bakar: oturumu olan quizin **soruları kilitlenir**, quiz **silinemez**, açık oturumu varsa **yayından kaldırılamaz** (Hafta 7 → 6, Hafta 8 düzeltmesi).
+- Öğrenci, `Participants` tablosu üzerinden oturuma bağlanır (`SessionId` + `UserId`).
+

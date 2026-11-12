@@ -140,6 +140,11 @@ public class QuizService
         if (publish && quiz!.Questions.Count == 0)
             return Result.Fail("Yayınlamak için quizde en az bir soru olmalıdır.");
 
+        // Hafta 8 düzeltmesi: açık oturumu olan quiz yayından kaldırılırsa öğrenciler
+        // bekleme salonunda taslak bir quizle kalıyordu. Önce oturum bitirilmeli.
+        if (!publish && await _quizRepository.HasOpenSessionAsync(quizId))
+            return Result.Fail("Bu quizin açık bir oturumu var. Önce oturumu bitirin ya da iptal edin.");
+
         quiz!.IsPublished = publish;
         quiz.UpdatedAt = DateTime.UtcNow;
         await _quizRepository.SaveAsync();

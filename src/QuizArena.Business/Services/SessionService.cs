@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using QuizArena.Business.Common;
 using QuizArena.Business.Dtos;
 using QuizArena.Business.Validation;
@@ -265,7 +266,17 @@ public class SessionService
             JoinedAt = DateTime.UtcNow
         });
 
-        await _sessionRepository.SaveAsync();
+        try
+        {
+            await _sessionRepository.SaveAsync();
+        }
+        catch (DbUpdateException)
+        {
+            // Hafta 8 düzeltmesi: iki öğrenci aynı anda aynı takma adla katılırsa yukarıdaki
+            // kontrolü ikisi de geçebiliyordu; veritabanındaki UNIQUE kural ikinciyi durdurur.
+            // Eskiden burada hata sayfası çıkıyordu, artık anlaşılır bir mesaj gösteriyoruz.
+            return Result<int>.Fail("Bu takma ad az önce alındı, başka bir ad seçin.");
+        }
         return Result<int>.Ok(session.Id);
     }
 

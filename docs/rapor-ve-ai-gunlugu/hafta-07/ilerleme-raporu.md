@@ -4,7 +4,7 @@
 
 | Öğrenci | Numara | Proje | Tarih |
 |---|---|---|---|
-|  |  | P60 — Sınıf İçi Oyunlaştırılmış Quiz Yarışması (QuizArena) | 05.11.2026 |
+| Hamza Önver | 251161043 | P60 — Sınıf İçi Oyunlaştırılmış Quiz Yarışması (QuizArena) | 05.11.2026 |
 
 **Hafta No:** 7 · Çekirdek Modül B: Canlı Oturum ve Katılım + Entegrasyon
 
@@ -31,7 +31,7 @@
 
 ## Yapay zekâ kullanımı özeti (günlüğe atıf)
 
-Oturum servisinin ve ekranların kodu için kullandım; doğru cevabın öğrenciye gitmemesi kuralını ben istedim (Bu haftanın AI günlüğü, 1–2. satırlar). → [ai-kullanim-gunlugu.md](ai-kullanim-gunlugu.md)
+Oturum servisinin ve ekranların kodu için kullandım; doğru cevabın öğrenciye gitmemesi kuralını ben istedim (Bu haftanın AI günlüğü, 1–3. satırlar). → [ai-kullanim-gunlugu.md](ai-kullanim-gunlugu.md)
 
 ## Sonraki hafta planı
 

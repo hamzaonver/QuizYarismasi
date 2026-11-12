@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using QuizArena.Entities;
+using QuizArena.Entities.Enums;
 
 namespace QuizArena.Data.Repositories;
 
@@ -45,5 +46,11 @@ public class QuizRepository : Repository<Quiz>, IQuizRepository
     public async Task<bool> IsUsedInSessionAsync(int quizId)
     {
         return await _context.QuizSessions.AnyAsync(s => s.QuizId == quizId);
+    }
+
+    // Hafta 8: Quizin bitmemiş (bekleyen ya da devam eden) oturumu var mı?
+    public async Task<bool> HasOpenSessionAsync(int quizId)
+    {
+        return await _context.QuizSessions.AnyAsync(s => s.QuizId == quizId && s.Status != SessionStatus.Finished);
     }
 }

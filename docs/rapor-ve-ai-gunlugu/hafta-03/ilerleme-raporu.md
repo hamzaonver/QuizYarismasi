@@ -4,7 +4,7 @@
 
 | Öğrenci | Numara | Proje | Tarih |
 |---|---|---|---|
-|  |  | P60 — Sınıf İçi Oyunlaştırılmış Quiz Yarışması (QuizArena) | 15.10.2026 |
+| Hamza Önver | 251161043 | P60 — Sınıf İçi Oyunlaştırılmış Quiz Yarışması (QuizArena) | 15.10.2026 |
 
 **Hafta No:** 3 · Kurulum, Mimari ve Veri Modeli
 

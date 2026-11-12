@@ -2,6 +2,8 @@
 
 > Şablon 8 · Yazdırılabilir sürüm: `Hafta-03-AI-Kullanim-Gunlugu.docx`
 
+**Öğrenci:** Hamza Önver · **Numara:** 251161043 · **Proje:** P60 — Sınıf İçi Oyunlaştırılmış Quiz Yarışması (QuizArena)
+
 | No | Tarih | Araç | Amaç/Görev | İstem (özet) | Öğrencinin Değişikliği/Doğrulaması | Açıklar mı? (E/H) |
 |---|---|---|---|---|---|---|
 | 1 | 15.10.2026 | Claude | Araştırma | P60 projesi için uygun teknoloji yığını ve katmanlı klasör yapısı nedir? | Seçenekler arasından C# ASP.NET Core MVC + SQLite'ı kendim seçtim; 4 katmanın görevlerini inceledim. | E |

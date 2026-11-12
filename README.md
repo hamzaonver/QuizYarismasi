@@ -1,6 +1,7 @@
 # QuizArena — Sınıf İçi Oyunlaştırılmış Quiz Yarışması
 
 > Bilgisayar Uygulamaları I · Proje P60 · Bingöl Üniversitesi Bilgisayar Programcılığı
+> Hazırlayan: Hamza Önver (251161043) · Güncel sürüm: **v0.8.0** (vize ara sürümü) · [Sürüm geçmişi](CHANGELOG.md)
 
 Öğretmenin quiz hazırlayıp sınıfta canlı oturum başlattığı, öğrencilerin katılım koduyla bağlanıp süreye karşı yarıştığı web uygulaması. Puan/lider tablosu, güç kartları ve oturum sonu analizi sonraki haftalarda eklenecek.
 
@@ -63,6 +64,15 @@ ya da Visual Studio'da `QuizArena.sln` → başlangıç projesi **QuizArena.Web*
 
 Yeni öğretmen hesabı açmak için davet kodu (geliştirme): `OGRETMEN-2026`
 
+## Testler
+
+| Test | Ne yapar | Nasıl çalıştırılır |
+|---|---|---|
+| **Entegrasyon testi** (Hafta 8) | Kayıt → giriş → quiz oluştur → yayınla → oturum → katıl → başlat → bitir; 38 kontrol. **Geçici veritabanı** kullanır, gerçek veriye dokunmaz | `scripts\entegrasyon-testi.bat` (çift tıkla) |
+| Hafta 7 testi | Canlı oturum akışını gerçek veritabanında dener, açtığı oturumu iptal eder | `scripts\hafta7-test.bat` |
+
+Sonuçlar `scripts\*-sonuc.txt` dosyalarına yazılır (depoya gitmez).
+
 ## Yapılandırma
 
 | Ayar | Dosya / ortam değişkeni | Açıklama |
@@ -83,7 +93,7 @@ src/
 ├── QuizArena.Business   → Servisler, iş kuralları/doğrulama, BCrypt, DTO'lar
 └── QuizArena.Web        → MVC Controller'lar, View'lar, çerez kimlik doğrulama
 docs/                    → ER diyagramı, mimari, haftalık notlar, güvenlik notu, SQL betikleri, AI günlüğü
-scripts/                 → İlk kurulum betikleri
+scripts/                 → İlk kurulum betikleri, otomatik testler
 ```
 
 Ayrıntı: [docs/mimari.md](docs/mimari.md) · [docs/er-diyagrami.md](docs/er-diyagrami.md)
@@ -97,7 +107,7 @@ Ayrıntı: [docs/mimari.md](docs/mimari.md) · [docs/er-diyagrami.md](docs/er-di
 | 5 | Kullanıcı yönetimi ve kimlik doğrulama | ✅ [notlar](docs/haftalar/hafta-05.md) · [güvenlik notu](docs/guvenlik-notu.md) |
 | 6 | Çekirdek Modül A: Quiz oluşturma | ✅ [notlar](docs/haftalar/hafta-06.md) |
 | 7 | Çekirdek Modül B: Canlı oturum ve katılım | ✅ [notlar](docs/haftalar/hafta-07.md) |
-| 8 | VİZE: Ara sürüm (`v0.1.0` etiketi) | ⏳ |
+| 8 | VİZE: Ara sürüm (`v0.8.0` etiketi), entegrasyon | ✅ [notlar](docs/haftalar/hafta-08.md) · [demo senaryosu](docs/demo-senaryosu.md) |
 | 9 | Gerçek zamanlı iletişim (SignalR / WebSocket) | ⏳ |
 | 10 | Yapay zekâ ile otomatik soru üretimi | ⏳ |
 | 11 | Puan, lider tablosu, güç kartları | ⏳ |

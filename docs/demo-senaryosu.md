@@ -2,6 +2,30 @@
 
 **Süre:** 7–8 dakika · **Gösterilecek:** Kullanıcı + veritabanı + çekirdek modüller uçtan uca çalışıyor (Hafta 8 PDF)
 
+## Demo linki (hoca link isterse)
+
+İki link var:
+
+| Link | Ne işe yarar | Nasıl alınır |
+|---|---|---|
+| **Kod linki** (sabit) | Projenin kodu, belgeler, sürüm geçmişi | `https://github.com/hamzaonver/QuizYarismasi` |
+| **Canlı demo linki** (her seferinde değişir) | Sitenin kendisi; hoca ve arkadaşlar kendi telefonundan/bilgisayarından açar, öğrenciler telefondan oturuma katılabilir | `scripts\demo-link.bat` → çift tıkla |
+
+**Canlı demo linki nasıl açılır:**
+1. Visual Studio'da site çalışıyorsa durdur (Shift+F5).
+2. `scripts\demo-link.bat` dosyasına çift tıkla, ~30 saniye bekle.
+3. Pencerede yeşil yazıyla **`DEMO LİNKİ: https://xxxxxxxx.lhr.life`** çıkar. Link panoya kopyalanır ve tarayıcıda kendiliğinden açılır.
+4. Linki hocaya / sınıf grubuna gönder (Ctrl+V). Arkadaşların telefondan açıp öğrenci olarak kayıt olup oturuma katılabilir.
+5. Demo bitince siyah pencerede **Enter**'a bas → site ve link kapanır.
+
+**Bilmen gerekenler:**
+- Link **sadece o pencere açıkken** ve bilgisayar internete bağlıyken çalışır. Pencereyi kapatma, bilgisayarı uyku moduna alma.
+- Link **her çalıştırmada değişir** → sunumdan hemen önce aç, o anki linki ver.
+- Hesap gerekmiyor; Windows'taki hazır `ssh` programıyla ücretsiz tünel (localhost.run) kullanılıyor. O olmazsa betik kendiliğinden serveo.net'i dener.
+- Okul ağı engellerse: telefonundan **hotspot** açıp bilgisayarı ona bağla, betiği tekrar çalıştır.
+- Link açıkken siteye herkes demo hesaplarıyla girebilir; demo bitince kapat.
+- Hoca "neden link değişiyor?" derse: *"Ücretsiz geçici tünel kullanıyorum. Kalıcı yayın (dağıtım) PDF'e göre 14. haftanın konusu."*
+
 ## Sunumdan önce (5 dakika, evde ya da sınıfa girmeden)
 
 1. Visual Studio → `QuizArena.sln` → başlangıç projesi **QuizArena.Web** → **F5**. Site açılmalı.
@@ -79,4 +103,5 @@ Sayfanın en altındaki **v0.8.0** yazısını göster.
 | Öğretmen ile öğrenci girişi karıştı | Öğrenciyi **gizli pencerede** aç |
 | F5'te "Uygulama Denetimi ilkesi ... engelledi" | Windows Güvenliği → Uygulama ve tarayıcı denetimi → Akıllı Uygulama Denetimi → Kapalı |
 | Entegrasyon testi "Derleme olmadı" diyor | Visual Studio'da site çalışıyorsa durdur (Shift+F5), testi tekrar çalıştır |
+| Demo linki çıkmadı ("Link alınamadı") | Okul ağı ssh'ı engelliyor olabilir → telefondan hotspot aç, `demo-link.bat`'ı tekrar çalıştır. Olmazsa demoyu kendi ekranından göster, kod linkini (GitHub) ver |
 | Kayıtta "Bu e-posta adresiyle zaten bir hesap var" | Prova sırasında o e-postayla kayıt oldun → farklı bir e-posta yaz (ör. `vize2@ornek.test`) |

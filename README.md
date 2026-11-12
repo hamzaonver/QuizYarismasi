@@ -64,6 +64,10 @@ ya da Visual Studio'da `QuizArena.sln` → başlangıç projesi **QuizArena.Web*
 
 Yeni öğretmen hesabı açmak için davet kodu (geliştirme): `OGRETMEN-2026`
 
+## Canlı demo linki (Hafta 8)
+
+`scripts\demo-link.bat` → siteyi açar ve ücretsiz bir tünelle (localhost.run, hesap gerekmez) `https://xxxx.lhr.life` gibi paylaşılabilir bir link verir. Link sadece pencere açıkken çalışır ve her seferinde değişir. Ayrıntı: [demo senaryosu](docs/demo-senaryosu.md#demo-linki-hoca-link-isterse)
+
 ## Testler
 
 | Test | Ne yapar | Nasıl çalıştırılır |

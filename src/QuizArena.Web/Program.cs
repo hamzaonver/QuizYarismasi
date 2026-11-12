@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizArena.Business;
@@ -57,6 +58,13 @@ using (var scope = app.Services.CreateScope())
     bool seedDemoData = app.Configuration.GetValue<bool>("Database:SeedDemoData");
     await DbInitializer.InitializeAsync(db, PasswordHelper.HashPassword, seedDemoData);
 }
+
+// Hafta 8: Demo linki (tünel) üzerinden açılınca site, tarayıcının https ile geldiğini
+// tünelin eklediği X-Forwarded-Proto başlığından öğrenir. Normal kullanımda etkisi yoktur.
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 if (!app.Environment.IsDevelopment())
 {

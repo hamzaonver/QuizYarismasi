@@ -12,6 +12,7 @@
 | Bilinen hataların giderilmesi | 3 hata düzeltildi (aşağıdaki tablo) | `QuizService.cs`, `SessionService.cs`, `Home/Index.cshtml` |
 | Ara sürüm etiketleme (Git tag) | `v0.8.0` etiketi ve GitHub Release oluşturuldu; sürüm numarası sitenin altında görünüyor | GitHub → Releases · `QuizArena.Web.csproj` → `<Version>` · `AppInfo.cs` |
 | Kısa demo senaryosu | 7–8 dakikalık vize demosu, adım adım | [docs/demo-senaryosu.md](../demo-senaryosu.md) |
+| Demo linki | `scripts\demo-link.bat` siteyi açıp internetten erişilebilen geçici bir link verir (SSH tüneli, hesap gerekmez). Kalıcı yayın Hafta 14'te | `scripts/demo-link.ps1`, `Program.cs` → `UseForwardedHeaders` |
 
 ## Düzeltilen bilinen hatalar
 

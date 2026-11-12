@@ -19,6 +19,7 @@ Her sürüm GitHub'da **Git tag** ile etiketlenir (ör. `v0.8.0`).
 - Uçtan uca **entegrasyon testi**: `scripts/entegrasyon-testi.bat`. Geçici bir veritabanında kayıt, giriş, quiz oluşturma, soru ekleme, yayınlama, oturum açma, katılım, başlatma, sonraki soru ve bitirme akışını otomatik dener; gerçek veritabanına dokunmaz.
 - Sayfanın altında sürüm numarası görünüyor (`v0.8.0`).
 - Vize demo senaryosu: `docs/demo-senaryosu.md`
+- **Canlı demo linki**: `scripts/demo-link.bat` siteyi açıp ücretsiz SSH tüneliyle (localhost.run) paylaşılabilir bir `https://...lhr.life` linki verir. Site, tünelin `X-Forwarded-Proto` başlığını okuyacak şekilde ayarlandı (`UseForwardedHeaders`).
 
 ### Düzeltildi (bilinen hatalar)
 - Açık (bekleyen ya da devam eden) oturumu olan bir quiz **yayından kaldırılabiliyordu**; öğrenciler bekleme salonunda taslak bir quizle kalıyordu. Artık önce oturumun bitirilmesi isteniyor.

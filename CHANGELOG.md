@@ -19,12 +19,15 @@ Her sürüm GitHub'da **Git tag** ile etiketlenir (ör. `v0.8.0`).
 - Uçtan uca **entegrasyon testi**: `scripts/entegrasyon-testi.bat`. Geçici bir veritabanında kayıt, giriş, quiz oluşturma, soru ekleme, yayınlama, oturum açma, katılım, başlatma, sonraki soru ve bitirme akışını otomatik dener; gerçek veritabanına dokunmaz.
 - Sayfanın altında sürüm numarası görünüyor (`v0.8.0`).
 - Vize demo senaryosu: `docs/demo-senaryosu.md`
-- **Canlı demo linki**: `scripts/demo-link.bat` siteyi açıp ücretsiz SSH tüneliyle (localhost.run) paylaşılabilir bir `https://...lhr.life` linki verir. Site, tünelin `X-Forwarded-Proto` başlığını okuyacak şekilde ayarlandı (`UseForwardedHeaders`).
+- **Canlı demo linki**: `scripts/demo-link.bat` siteyi açıp ücretsiz SSH tüneliyle (localhost.run) paylaşılabilir bir `https://...lhr.life` linki verir. Site, tünelin `X-Forwarded-Proto` başlığını okuyacak şekilde ayarlandı (`UseForwardedHeaders`). Betik QR kod gösterir, bağlantı koparsa yeniden bağlanır, demo sürerken bilgisayarın uykuya geçmesini engeller.
+- Linke girenler için ana sayfada **"Nasıl denenir?"** rehberi; giriş/kayıt sayfalarında demo hesapları ve öğretmen davet kodu (sadece geliştirme ortamında).
+- Sayfalar sıkıştırılarak gönderiliyor (gzip/brotli) ve CSS/JS tarayıcıda saklanıyor: link üzerinden açılış çok daha hızlı.
 
 ### Düzeltildi (bilinen hatalar)
 - Açık (bekleyen ya da devam eden) oturumu olan bir quiz **yayından kaldırılabiliyordu**; öğrenciler bekleme salonunda taslak bir quizle kalıyordu. Artık önce oturumun bitirilmesi isteniyor.
 - İki öğrenci **aynı anda aynı takma adla** katılırsa ikincisi hata sayfası görüyordu. Artık "Bu takma ad az önce alındı" mesajı çıkıyor.
 - Ana sayfada "Canlı oturum" özelliği hâlâ "Yakında" yazıyordu; Hafta 7'de tamamlandığı için düzeltildi.
+- Telefonda üst menü (hamburger) ikonu görünmüyordu; düzeltildi.
 
 ## [0.7.0] — 05.11.2026 · Hafta 7
 - Canlı oturum ve katılım: katılım kodu, bekleme salonu, Başlat / Sonraki soru / Bitir / İptal, 3 saniyelik durum kontrolü.

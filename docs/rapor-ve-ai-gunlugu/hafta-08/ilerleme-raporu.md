@@ -12,7 +12,8 @@
 
 - Modülleri uçtan uca entegre ettim: kullanıcı (H5) + veritabanı (H4) + quiz (H6) + canlı oturum (H7) tek akışta çalışıyor.
 - Otomatik entegrasyon testi yazıldı (scripts/entegrasyon-testi.bat): 38 kontrol, geçici veritabanı kullanıyor, gerçek veriye dokunmuyor.
-- 3 bilinen hata düzeltildi: açık oturumlu quizin yayından kaldırılması, aynı anda aynı takma adla katılımda hata sayfası, ana sayfadaki eski 'Yakında' yazısı.
+- 4 bilinen hata düzeltildi: açık oturumlu quizin yayından kaldırılması, aynı anda aynı takma adla katılımda hata sayfası, ana sayfadaki eski 'Yakında' yazısı, telefonda görünmeyen menü ikonu.
+- Canlı demo linki: scripts/demo-link.bat siteyi açıp internetten erişilebilen geçici bir link (QR kodlu) veriyor; linke giren hoca 'Nasıl denenir?' rehberiyle kayıt olup deneyebiliyor.
 - Ara sürüm v0.8.0: Git tag + GitHub Release, CHANGELOG.md, sürüm numarası sitenin altında.
 - Vize demo senaryosu (docs/demo-senaryosu.md) ve sözlü sınav cevapları (docs/haftalar/hafta-08.md) hazırlandı; mimari doküman güncellendi.
 
@@ -32,7 +33,7 @@
 
 ## Yapay zekâ kullanımı özeti (günlüğe atıf)
 
-Entegrasyon hatalarını ayıklamak, test betiğini yazmak, sürümleme ve dokümanlar için kullandım; her değişikliğin açıklaması hafta-08.md'de (Bu haftanın AI günlüğü, 1–5. satırlar). → [ai-kullanim-gunlugu.md](ai-kullanim-gunlugu.md)
+Entegrasyon hatalarını ayıklamak, test betiğini yazmak, sürümleme ve dokümanlar için kullandım; her değişikliğin açıklaması hafta-08.md'de (Bu haftanın AI günlüğü, 1–6. satırlar). → [ai-kullanim-gunlugu.md](ai-kullanim-gunlugu.md)
 
 ## Sonraki hafta planı
 

@@ -32,14 +32,7 @@
         </p>
     </div>
 
-    @if (Env.IsDevelopment())
-    {
-        <div class="demo-accounts mt-3">
-            <strong>Geliştirme ortamı demo hesapları</strong> (sentetik veri):<br />
-            Öğretmen: <code>ogretmen@@quizarena.test</code> / <code>Ogretmen123!</code><br />
-            Öğrenci: <code>ogrenci1@@quizarena.test</code> / <code>Ogrenci123!</code>
-        </div>
-    }
+    <partial name="_DemoBilgi" />
 </div>
 
 @section Scripts {

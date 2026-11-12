@@ -1,4 +1,5 @@
-﻿@{
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
+@{
     ViewData["Title"] = "Hoş geldiniz";
 }
 
@@ -14,6 +15,22 @@
         <span class="opt-3"></span><span class="opt-4"></span>
     </div>
 </section>
+
+@if (Env.IsDevelopment())
+{
+    @* Hafta 8 (vize demosu): linke giren hocanın siteyi nasıl deneyeceğini gösteren kısa rehber *@
+    <div class="qa-card mb-4">
+        <h2 class="h5 fw-bold mb-3">Nasıl denenir? (vize demosu · v@(QuizArena.Web.AppInfo.Version))</h2>
+        <ol class="mb-0">
+            <li><strong>Öğretmen:</strong> Kayıt ol (rol: Öğretmen, davet kodu aşağıda) ya da demo öğretmen hesabıyla giriş yap.</li>
+            <li><strong>Quiz hazırla:</strong> + Yeni quiz → soru ekle (2–6 şık, tek doğru cevap) → <em>Yayınla</em>.</li>
+            <li><strong>Canlı oturum:</strong> Quiz sayfasında <em>▶ Canlı oturum başlat</em> → ekranda 6 haneli katılım kodu çıkar.</li>
+            <li><strong>Öğrenci:</strong> Başka bir cihazdan (telefon) ya da gizli pencereden öğrenci olarak kayıt ol/giriş yap → kodu ve takma adı gir.</li>
+            <li><strong>Yönet:</strong> Öğretmen ekranında katılımcılar 3 saniye içinde görünür → <em>Oturumu başlat</em> → <em>Sonraki soru</em> → bitir.</li>
+        </ol>
+        <partial name="_DemoBilgi" />
+    </div>
+}
 
 <div class="row g-3">
     <div class="col-md-4">

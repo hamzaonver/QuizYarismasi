@@ -49,6 +49,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.Name = "QuizArena.Auth";
     });
 
+// Hafta 8: Sayfaları sıkıştırarak (gzip/brotli) gönder. Demo linki (tünel) üzerinden
+// açılınca CSS/JS dosyaları çok daha hızlı yüklenir (bootstrap.css ~160 KB -> ~25 KB).
+builder.Services.AddResponseCompression(options => options.EnableForHttps = true);
+
 var app = builder.Build();
 
 // ---------- Veritabanını hazırla ----------
@@ -74,7 +78,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStatusCodePagesWithReExecute("/Home/StatusCodePage", "?code={0}"); // 404 için özel sayfa
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseResponseCompression(); // Hafta 8
+// Hafta 8: CSS/JS/resim dosyaları tarayıcıda 1 gün saklansın; her sayfada yeniden indirilmesin
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx => ctx.Context.Response.Headers["Cache-Control"] = "public,max-age=86400"
+});
 
 app.UseRouting();
 

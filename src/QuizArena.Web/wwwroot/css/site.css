@@ -34,10 +34,10 @@ main { flex: 1; }
 .qa-navbar {
     background: linear-gradient(90deg, var(--qa-primary-dark), var(--qa-primary) 60%, var(--qa-accent));
 }
-.qa-navbar .nav-link { color: rgba(255, 255, 255, .85); font-weight: 600; }
-.qa-navbar .nav-link:hover { color: #fff; }
+.qa-navbar .navbar-nav .nav-link { color: rgba(255, 255, 255, .85); font-weight: 600; }
+.qa-navbar .navbar-nav .nav-link:hover { color: #fff; }
 .qa-navbar .navbar-toggler { border-color: rgba(255, 255, 255, .5); }
-.qa-navbar .navbar-toggler-icon { filter: invert(1); }
+/* Hafta 8: mobilde menü (hamburger) ikonu görünmüyordu; navbar-dark sınıfı beyaz ikonu veriyor */
 .qa-brand { color: #fff !important; font-weight: 800; letter-spacing: .3px; display: flex; align-items: center; gap: .5rem; }
 .qa-brand-mark {
     display: inline-grid; place-items: center;

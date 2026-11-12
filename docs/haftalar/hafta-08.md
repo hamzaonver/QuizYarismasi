@@ -9,7 +9,7 @@
 | PDF'teki görev | Ne yaptım | Nerede |
 |---|---|---|
 | Modüllerin uçtan uca entegrasyonu | Kullanıcı (H5) + veritabanı (H4) + quiz (H6) + canlı oturum (H7) birlikte çalışıyor. Bunu otomatik **entegrasyon testi** ile kanıtladım (38 kontrol) | `scripts/entegrasyon-testi.bat` |
-| Bilinen hataların giderilmesi | 3 hata düzeltildi (aşağıdaki tablo) | `QuizService.cs`, `SessionService.cs`, `Home/Index.cshtml` |
+| Bilinen hataların giderilmesi | 4 hata düzeltildi (aşağıdaki tablo) | `QuizService.cs`, `SessionService.cs`, `Home/Index.cshtml`, `_Layout.cshtml` |
 | Ara sürüm etiketleme (Git tag) | `v0.8.0` etiketi ve GitHub Release oluşturuldu; sürüm numarası sitenin altında görünüyor | GitHub → Releases · `QuizArena.Web.csproj` → `<Version>` · `AppInfo.cs` |
 | Kısa demo senaryosu | 7–8 dakikalık vize demosu, adım adım | [docs/demo-senaryosu.md](../demo-senaryosu.md) |
 | Demo linki | `scripts\demo-link.bat` siteyi açıp internetten erişilebilen geçici bir link verir (SSH tüneli, hesap gerekmez). Kalıcı yayın Hafta 14'te | `scripts/demo-link.ps1`, `Program.cs` → `UseForwardedHeaders` |
@@ -21,6 +21,7 @@
 | 1 | Açık oturumu olan quiz **yayından kaldırılabiliyordu** | Öğrenciler bekleme salonunda taslak bir quizle kalıyordu (Hafta 6 ve 7 arasındaki entegrasyon hatası) | Yayından kaldırmadan önce açık oturum var mı diye bakılıyor; varsa "Önce oturumu bitirin" mesajı | `QuizService.SetPublishedAsync`, `QuizRepository.HasOpenSessionAsync` |
 | 2 | İki öğrenci **aynı anda aynı takma adla** katılırsa ikincisi **hata sayfası** görüyordu | Kontrolü ikisi de aynı anda geçebiliyordu; veritabanındaki UNIQUE kural ikinciyi durdurunca hata çıkıyordu | Veritabanı hatası yakalanıyor, "Bu takma ad az önce alındı" mesajı gösteriliyor | `SessionService.JoinAsync` (`try / catch DbUpdateException`) |
 | 3 | Ana sayfada "Canlı oturum" hâlâ **"Yakında"** yazıyordu | Hafta 7'de tamamlanmıştı, yanlış bilgi veriyordu | Metin güncellendi | `Views/Home/Index.cshtml` |
+| 4 | Telefonda üst menü (hamburger) **ikonu görünmüyordu** | Demo linkine telefondan girenler menüyü bulamazdı | Menüye `navbar-dark` sınıfı eklendi | `_Layout.cshtml`, `site.css` |
 
 ## Entegrasyon testi (Temel entegrasyon testi yaklaşımı)
 

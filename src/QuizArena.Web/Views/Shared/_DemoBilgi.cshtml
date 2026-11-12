@@ -1,0 +1,18 @@
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
+@inject Microsoft.Extensions.Configuration.IConfiguration Config
+@* Hafta 8 (vize demosu): Linke giren kişinin siteyi hemen deneyebilmesi için demo bilgileri.
+   Sadece geliştirme ortamında görünür; gerçek kullanımda (Production) gösterilmez. *@
+@if (Env.IsDevelopment())
+{
+    var davetKodu = Config["Auth:TeacherInviteCode"];
+    <div class="demo-accounts mt-3">
+        <strong>Demo için hazır hesaplar</strong> (sentetik veri):<br />
+        Öğretmen: <code>ogretmen@@quizarena.test</code> / <code>Ogretmen123!</code><br />
+        Öğrenci: <code>ogrenci1@@quizarena.test</code> / <code>Ogrenci123!</code> · <code>ogrenci2@@quizarena.test</code> / <code>Ogrenci123!</code>
+        @if (!string.IsNullOrEmpty(davetKodu))
+        {
+            <br />
+            <span>Kendi hesabını da açabilirsin. Öğretmen olarak kayıt olmak için davet kodu: <code>@davetKodu</code></span>
+        }
+    </div>
+}

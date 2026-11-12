@@ -55,62 +55,107 @@ if (-not $acik) {
     exit 1
 }
 
-# 4) Tüneli aç (önce localhost.run, olmazsa serveo.net)
-Yaz "3/3 İnternet linki alınıyor..."
+# 4) Demo sürerken bilgisayarın uykuya geçmesini engelle (uyursa link kapanır)
+try {
+    Add-Type -Namespace QuizArena -Name Uyku -MemberDefinition '[DllImport("kernel32.dll")] public static extern uint SetThreadExecutionState(uint esFlags);'
+    $null = [QuizArena.Uyku]::SetThreadExecutionState([uint32]2147483651)   # CONTINUOUS | SYSTEM_REQUIRED | DISPLAY_REQUIRED
+} catch { }
+
+# 5) Tünel: önce localhost.run, olmazsa serveo.net
 $tuneller = @(
     @{ Ad = "localhost.run"; Arg = "-n -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=30 -R 80:localhost:$port nokey@localhost.run"; Desen = 'https://[a-z0-9]+\.lhr\.life' },
     @{ Ad = "serveo.net";    Arg = "-n -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=30 -R 80:localhost:$port serveo.net";          Desen = 'https://[a-z0-9\-]+\.serveousercontent\.com' }
 )
-$ssh = $null; $link = ""
-foreach ($t in $tuneller) {
-    $cikti = Join-Path $env:TEMP "quizarena-tunel.txt"
-    Remove-Item $cikti, "$cikti.err" -ErrorAction SilentlyContinue
-    $ssh = Start-Process ssh -ArgumentList $t.Arg -NoNewWindow -PassThru -RedirectStandardOutput $cikti -RedirectStandardError "$cikti.err"
-    for ($i = 0; $i -lt 25 -and -not $link; $i++) {
-        Start-Sleep 1
-        $metin = ""
-        if (Test-Path $cikti) { $metin += Get-Content $cikti -Raw }
-        if (Test-Path "$cikti.err") { $metin += Get-Content "$cikti.err" -Raw }
-        if ($metin -match $t.Desen) { $link = $matches[0] }
-        if ($ssh.HasExited) { break }
+$cikti = Join-Path $env:TEMP "quizarena-tunel.txt"
+
+# Tüneli açar, linki ve ssh sürecini döndürür
+function Tunel-Ac {
+    foreach ($t in $tuneller) {
+        Remove-Item $cikti, "$cikti.err" -ErrorAction SilentlyContinue
+        $p = Start-Process ssh -ArgumentList $t.Arg -NoNewWindow -PassThru -RedirectStandardOutput $cikti -RedirectStandardError "$cikti.err"
+        for ($i = 0; $i -lt 25; $i++) {
+            Start-Sleep 1
+            $metin = ""
+            if (Test-Path $cikti) { $metin += Get-Content $cikti -Raw }
+            if (Test-Path "$cikti.err") { $metin += Get-Content "$cikti.err" -Raw }
+            if ($metin -match $t.Desen) { return @{ Ssh = $p; Link = $matches[0]; Desen = $t.Desen } }
+            if ($p.HasExited) { break }
+        }
+        if (-not $p.HasExited) { Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue }
+        Yaz "   $($t.Ad) olmadı, diğeri deneniyor..." Yellow
     }
-    if ($link) { break }
-    if (-not $ssh.HasExited) { Stop-Process -Id $ssh.Id -Force -ErrorAction SilentlyContinue }
-    Yaz "   $($t.Ad) olmadı, diğeri deneniyor..." Yellow
+    return @{ Ssh = $null; Link = ""; Desen = "" }
 }
 
+# Linki ekrana yazar (telefon için QR kodu da gösterir)
+function Link-Goster($link) {
+    $calisiyor = $false
+    for ($i = 0; $i -lt 5 -and -not $calisiyor; $i++) {
+        try { $r = Invoke-WebRequest "$link/Account/Login" -UseBasicParsing -TimeoutSec 15; $calisiyor = ($r.Content -match "QuizArena") }
+        catch { Start-Sleep 2 }
+    }
+    Set-Content -Path $linkDosyasi -Value @($link, "kontrol: $calisiyor", (Get-Date)) -Encoding UTF8
+    try { Set-Clipboard -Value $link } catch { }
+
+    # localhost.run çıktısındaki QR kodu (telefon kamerasıyla okutulabilir)
+    if (Test-Path $cikti) {
+        $satirlar = Get-Content $cikti
+        $qrBasla = ($satirlar | Select-String -Pattern "QR" -SimpleMatch | Select-Object -First 1).LineNumber
+        if ($qrBasla) { $satirlar | Select-Object -Skip $qrBasla | ForEach-Object { Write-Host $_ } }
+    }
+    Yaz ""
+    Yaz "==============================================================" Green
+    Yaz "  DEMO LİNKİ:  $link" Green
+    Yaz "==============================================================" Green
+    if ($calisiyor) { Yaz "  Kontrol: link internetten açılıyor (OK)" Green } else { Yaz "  Kontrol: link henüz cevap vermedi, birkaç saniye sonra tarayıcıda dene" Yellow }
+    Yaz "  Link panoya kopyalandı (Ctrl+V ile yapıştırabilirsin). Telefondan QR kodu okutulabilir."
+    Yaz "  Öğretmen: ogretmen@quizarena.test / Ogretmen123!   (öğretmen kaydı davet kodu: OGRETMEN-2026)"
+    Yaz "  Öğrenci : ogrenci1@quizarena.test / Ogrenci123!   (ya da Kayıt ol)"
+    Yaz "  Link sadece bu pencere açıkken çalışır. KAPATMAK İÇİN: Enter" Cyan
+    Yaz ""
+}
+
+Yaz "3/3 İnternet linki alınıyor..."
+$tunel = Tunel-Ac
 try {
-    if (-not $link) {
+    if (-not $tunel.Link) {
         Yaz "Link alınamadı. İnternet bağlantını kontrol et (okul ağı ssh'ı engelliyor olabilir; telefondan hotspot dene)." Red
         Yaz "Site yine de bu bilgisayarda açık: $yerel" Yellow
+        Start-Process $yerel
     }
     else {
-        # Link dışarıdan gerçekten açılıyor mu? (internet üzerinden giriş sayfasını iste)
-        $calisiyor = $false
-        for ($i = 0; $i -lt 5 -and -not $calisiyor; $i++) {
-            try { $r = Invoke-WebRequest "$link/Account/Login" -UseBasicParsing -TimeoutSec 15; $calisiyor = ($r.Content -match "QuizArena") }
-            catch { Start-Sleep 2 }
-        }
-        Set-Content -Path $linkDosyasi -Value @($link, "kontrol: $calisiyor") -Encoding UTF8
-        try { Set-Clipboard -Value $link } catch { }
-        Yaz ""
-        Yaz "==============================================================" Green
-        Yaz "  DEMO LİNKİ:  $link" Green
-        Yaz "==============================================================" Green
-        if ($calisiyor) { Yaz "  Kontrol: link internetten açılıyor (OK)" Green } else { Yaz "  Kontrol: link henüz cevap vermedi, birkaç saniye sonra tarayıcıda dene" Yellow }
-        Yaz "  Link panoya kopyalandı (Ctrl+V ile yapıştırabilirsin)."
-        Yaz "  Öğretmen: ogretmen@quizarena.test / Ogretmen123!"
-        Yaz "  Öğrenci : ogrenci1@quizarena.test / Ogrenci123!  (ya da Kayıt ol)"
-        Yaz "  Link sadece bu pencere açıkken çalışır."
-        Yaz ""
-        Start-Process $link   # linki varsayılan tarayıcıda aç
+        Link-Goster $tunel.Link
+        Start-Process $tunel.Link   # linki varsayılan tarayıcıda aç
     }
 
-    if ($Sure -gt 0) { Start-Sleep -Seconds $Sure }
-    else { $null = Read-Host "Demo bitince kapatmak için Enter'a bas" }
+    # Bekle: Enter'a basılınca çık. Tünel koparsa kendiliğinden yeniden bağlan.
+    $baslangic = Get-Date
+    while ($true) {
+        Start-Sleep -Milliseconds 500
+        if ($Sure -gt 0 -and ((Get-Date) - $baslangic).TotalSeconds -ge $Sure) { break }
+        if ($Sure -le 0) {
+            try { if ([Console]::KeyAvailable -and [Console]::ReadKey($true).Key -eq "Enter") { break } } catch { }
+        }
+        # Ücretsiz tünel adresi ara sıra değişebilir: çıktıda yeni bir link görünürse ekrana yaz
+        if ($tunel.Link -and ((Get-Date).Second % 5 -eq 0) -and (Test-Path $cikti)) {
+            $tumu = [regex]::Matches((Get-Content $cikti -Raw), $tunel.Desen)
+            if ($tumu.Count -gt 0 -and $tumu[$tumu.Count - 1].Value -ne $tunel.Link) {
+                $tunel.Link = $tumu[$tumu.Count - 1].Value
+                Yaz "DİKKAT: Tünel adresi değişti, yeni linki paylaş!" Yellow
+                Link-Goster $tunel.Link
+            }
+        }
+        if ($tunel.Ssh -and $tunel.Ssh.HasExited) {
+            Yaz "Bağlantı koptu, yeniden bağlanılıyor..." Yellow
+            $tunel = Tunel-Ac
+            if ($tunel.Link) { Yaz "DİKKAT: Link değişti, yeni linki paylaş!" Yellow; Link-Goster $tunel.Link }
+            else { Start-Sleep 10 }
+        }
+    }
 }
 finally {
-    if ($ssh -and -not $ssh.HasExited) { Stop-Process -Id $ssh.Id -Force -ErrorAction SilentlyContinue }
+    if ($tunel.Ssh -and -not $tunel.Ssh.HasExited) { Stop-Process -Id $tunel.Ssh.Id -Force -ErrorAction SilentlyContinue }
     if ($site) { & taskkill /PID $site.Id /T /F 2>&1 | Out-Null }
+    try { $null = [QuizArena.Uyku]::SetThreadExecutionState([uint32]2147483648) } catch { }
     Yaz "Site ve link kapatıldı."
 }

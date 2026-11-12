@@ -14,12 +14,14 @@
 **Canlı demo linki nasıl açılır:**
 1. Visual Studio'da site çalışıyorsa durdur (Shift+F5).
 2. `scripts\demo-link.bat` dosyasına çift tıkla, ~30 saniye bekle.
-3. Pencerede yeşil yazıyla **`DEMO LİNKİ: https://xxxxxxxx.lhr.life`** çıkar. Link panoya kopyalanır ve tarayıcıda kendiliğinden açılır.
+3. Pencerede yeşil yazıyla **`DEMO LİNKİ: https://xxxxxxxx.lhr.life`** çıkar, üstünde telefonla okutulabilen bir **QR kod** vardır. Link panoya kopyalanır ve tarayıcıda kendiliğinden açılır. "Kontrol: link internetten açılıyor (OK)" yazısını gör.
 4. Linki hocaya / sınıf grubuna gönder (Ctrl+V). Arkadaşların telefondan açıp öğrenci olarak kayıt olup oturuma katılabilir.
 5. Demo bitince siyah pencerede **Enter**'a bas → site ve link kapanır.
 
 **Bilmen gerekenler:**
-- Link **sadece o pencere açıkken** ve bilgisayar internete bağlıyken çalışır. Pencereyi kapatma, bilgisayarı uyku moduna alma.
+- Link **sadece o pencere açıkken** ve bilgisayar internete bağlıyken çalışır. Pencereyi kapatma. (Betik açıkken bilgisayar kendiliğinden uykuya geçmez.)
+- Ücretsiz tünel adresi ara sıra **kendiliğinden değişebilir** ya da bağlantı kopabilir. Betik bunu fark edip yeniden bağlanır ve sarı yazıyla **"DİKKAT: ... yeni linki paylaş!"** der; o zaman yeni linki tekrar paylaş. Eski link genelde bir süre daha çalışmaya devam eder.
+- Linke girenler ana sayfada **"Nasıl denenir?"** kutusunu, giriş ve kayıt sayfalarında demo hesaplarını ve öğretmen davet kodunu (`OGRETMEN-2026`) görür. Yani hoca kendi başına kayıt olup deneyebilir.
 - Link **her çalıştırmada değişir** → sunumdan hemen önce aç, o anki linki ver.
 - Hesap gerekmiyor; Windows'taki hazır `ssh` programıyla ücretsiz tünel (localhost.run) kullanılıyor. O olmazsa betik kendiliğinden serveo.net'i dener.
 - Okul ağı engellerse: telefonundan **hotspot** açıp bilgisayarı ona bağla, betiği tekrar çalıştır.

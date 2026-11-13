@@ -115,9 +115,18 @@ function Tunel-Ac {
 # Linki ekrana yazar (telefon için QR kodu da gösterir)
 function Link-Goster($link) {
     $calisiyor = $false
-    for ($i = 0; $i -lt 5 -and -not $calisiyor; $i++) {
+    # Yeni linkin internette görünmesi 10-30 saniye sürebilir. Önce Cloudflare'in kendi DNS'inden (1.1.1.1)
+    # adres hazır mı diye bak; erken sorulursa internet sağlayıcısı "yok" cevabını bir süre hatırlıyor.
+    if ($link -like "*trycloudflare*") {
+        $alan = $link -replace "https://", ""
+        for ($i = 0; $i -lt 30; $i++) {
+            try { $null = Resolve-DnsName $alan -Server 1.1.1.1 -Type A -ErrorAction Stop; break } catch { Start-Sleep 2 }
+        }
+        Start-Sleep 5
+    }
+    for ($i = 0; $i -lt 20 -and -not $calisiyor; $i++) {
         try { $r = Invoke-WebRequest "$link/Account/Login" -UseBasicParsing -TimeoutSec 15; $calisiyor = ($r.Content -match "QuizArena") }
-        catch { Start-Sleep 2 }
+        catch { Start-Sleep 3 }
     }
     Set-Content -Path $linkDosyasi -Value @($link, "kontrol: $calisiyor", (Get-Date)) -Encoding UTF8
     try { Set-Clipboard -Value $link } catch { }
@@ -162,13 +171,17 @@ try {
             try { if ([Console]::KeyAvailable -and [Console]::ReadKey($true).Key -eq "Enter") { break } } catch { }
         }
         # Ücretsiz tünel adresi ara sıra değişebilir: çıktıda yeni bir link görünürse ekrana yaz
-        if ($tunel.Link -and ((Get-Date).Second % 5 -eq 0) -and (Test-Path $cikti)) {
-            $tumu = [regex]::Matches((Get-Content $cikti -Raw), $tunel.Desen)
-            if ($tumu.Count -gt 0 -and $tumu[$tumu.Count - 1].Value -ne $tunel.Link) {
-                $tunel.Link = $tumu[$tumu.Count - 1].Value
-                Yaz "DİKKAT: Tünel adresi değişti, yeni linki paylaş!" Yellow
-                Link-Goster $tunel.Link
-            }
+        # (sadece localhost.run adresi değişir; Cloudflare linki sabittir)
+        if ($tunel.Link -like "*lhr.life*" -and ((Get-Date).Second % 5 -eq 0)) {
+            try {
+                $metin = "" + (Get-Content $cikti -Raw -ErrorAction SilentlyContinue) + (Get-Content "$cikti.err" -Raw -ErrorAction SilentlyContinue)
+                $tumu = [regex]::Matches($metin, $tunel.Desen)
+                if ($tumu.Count -gt 0 -and $tumu[$tumu.Count - 1].Value -ne $tunel.Link) {
+                    $tunel.Link = $tumu[$tumu.Count - 1].Value
+                    Yaz "DİKKAT: Tünel adresi değişti, yeni linki paylaş!" Yellow
+                    Link-Goster $tunel.Link
+                }
+            } catch { }
         }
         if ($tunel.Ssh -and $tunel.Ssh.HasExited) {
             Yaz "Bağlantı koptu, yeniden bağlanılıyor..." Yellow

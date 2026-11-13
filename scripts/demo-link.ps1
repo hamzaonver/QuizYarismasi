@@ -1,7 +1,8 @@
 ﻿# Hafta 8 - Vize demosu için paylaşılabilir link
 #
-# Siteyi bu bilgisayarda açar ve ücretsiz bir SSH tüneli (localhost.run) ile internete bağlar.
-# Sonunda https://xxxxx.lhr.life gibi bir link verir. Bu linki hoca ve arkadaşlar
+# Siteyi bu bilgisayarda açar ve ücretsiz bir tünelle internete bağlar.
+# Önce Cloudflare'in hesapsız "quick tunnel" özelliği kullanılır (https://xxxx.trycloudflare.com):
+# bu link pencere açık kaldığı sürece DEĞİŞMEZ. Olmazsa SSH tüneli (localhost.run) denenir. Bu linki hoca ve arkadaşlar
 # kendi telefonundan / bilgisayarından açabilir (aynı Wi-Fi'da olmaları gerekmez).
 #
 # Önemli:
@@ -26,6 +27,14 @@ if (-not (Get-Command ssh -ErrorAction SilentlyContinue)) {
     Yaz "ssh bulunamadı. Ayarlar > Sistem > İsteğe bağlı özellikler > 'OpenSSH İstemcisi' ekle." Red
     exit 1
 }
+
+# 0b) Daha önce açık kalmış demo-link penceresi ve tünelleri varsa kapat
+Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
+    Where-Object { $_.ProcessId -ne $PID -and (
+        ($_.Name -like "powershell*" -and $_.CommandLine -like "*demo-link.ps1*") -or
+        ($_.Name -eq "ssh.exe" -and $_.CommandLine -like "*localhost:$port*") -or
+        ($_.Name -eq "cloudflared.exe")) } |
+    ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
 
 # 1) Bu portta eskiden kalmış bir site varsa kapat
 Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue |
@@ -62,7 +71,9 @@ try {
 } catch { }
 
 # 5) Tünel: önce localhost.run, olmazsa serveo.net
+$cloudflared = Join-Path $env:LOCALAPPDATA "QuizArena\cloudflared.exe"
 $tuneller = @(
+    @{ Ad = "Cloudflare";    Exe = $cloudflared; Arg = "tunnel --no-autoupdate --url http://localhost:$port"; Desen = 'https://(?!api\.)[a-z0-9\-]+\.trycloudflare\.com' },
     @{ Ad = "localhost.run"; Arg = "-n -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=30 -R 80:localhost:$port nokey@localhost.run"; Desen = 'https://[a-z0-9]+\.lhr\.life' },
     @{ Ad = "serveo.net";    Arg = "-n -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=30 -R 80:localhost:$port serveo.net";          Desen = 'https://[a-z0-9\-]+\.serveousercontent\.com' }
 )
@@ -72,8 +83,22 @@ $cikti = Join-Path $env:TEMP "quizarena-tunel.txt"
 function Tunel-Ac {
     foreach ($t in $tuneller) {
         Remove-Item $cikti, "$cikti.err" -ErrorAction SilentlyContinue
-        $p = Start-Process ssh -ArgumentList $t.Arg -NoNewWindow -PassThru -RedirectStandardOutput $cikti -RedirectStandardError "$cikti.err"
-        for ($i = 0; $i -lt 25; $i++) {
+        $program = "ssh"
+        if ($t.Exe) {
+            # Cloudflare programı yoksa resmi GitHub sayfasından bir kere indir (~60 MB)
+            if (-not (Test-Path $t.Exe)) {
+                Yaz "   Cloudflare tünel programı indiriliyor (bir kere, ~60 MB)..." Yellow
+                try {
+                    New-Item -ItemType Directory -Force -Path (Split-Path $t.Exe) | Out-Null
+                    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+                    $ProgressPreference = "SilentlyContinue"
+                    Invoke-WebRequest "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe" -OutFile $t.Exe -UseBasicParsing
+                } catch { Yaz "   İndirilemedi: $($_.Exception.Message)" Yellow; Remove-Item $t.Exe -ErrorAction SilentlyContinue; continue }
+            }
+            $program = $t.Exe
+        }
+        $p = Start-Process $program -ArgumentList $t.Arg -NoNewWindow -PassThru -RedirectStandardOutput $cikti -RedirectStandardError "$cikti.err"
+        for ($i = 0; $i -lt 40; $i++) {
             Start-Sleep 1
             $metin = ""
             if (Test-Path $cikti) { $metin += Get-Content $cikti -Raw }
@@ -108,7 +133,7 @@ function Link-Goster($link) {
     Yaz "  DEMO LİNKİ:  $link" Green
     Yaz "==============================================================" Green
     if ($calisiyor) { Yaz "  Kontrol: link internetten açılıyor (OK)" Green } else { Yaz "  Kontrol: link henüz cevap vermedi, birkaç saniye sonra tarayıcıda dene" Yellow }
-    Yaz "  Link panoya kopyalandı (Ctrl+V ile yapıştırabilirsin). Telefondan QR kodu okutulabilir."
+    Yaz "  Link panoya kopyalandı (Ctrl+V ile yapıştırabilirsin)."
     Yaz "  Öğretmen: ogretmen@quizarena.test / Ogretmen123!   (öğretmen kaydı davet kodu: OGRETMEN-2026)"
     Yaz "  Öğrenci : ogrenci1@quizarena.test / Ogrenci123!   (ya da Kayıt ol)"
     Yaz "  Link sadece bu pencere açıkken çalışır. KAPATMAK İÇİN: Enter" Cyan
